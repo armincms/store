@@ -1,0 +1,50 @@
+<?php
+
+namespace Armincms\Store\Models;
+      
+use Armincms\Concerns\HasConfig;
+
+
+class StoreCarrier extends Model  
+{ 	   
+	use HasConfig;
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+    	'name' => 'json',
+    ];
+
+	protected $medias = [
+        'logo' => [  
+            'disk'  => 'armin.image',
+            'conversions' => [
+                'logo'
+            ]
+        ], 
+	];  
+
+	/**
+	 * Query related TaxationTax.
+	 * 
+	 * @return \Illuminate\Database\Elqoeunt\Relations\BelongsToMany
+	 */
+	public function tax()
+	{
+		return $this->belongsTo(\Armincms\Taxation\Models\TaxationTax::class);
+	}
+
+	/**
+	 * Query related LocationZone.
+	 * 
+	 * @return \Illuminate\Database\Elqoeunt\Relations\BelongsToMany
+	 */
+	public function ranges()
+	{
+		return $this->belongsToMany(\Armincms\Location\Models\LocationZone::class, 'store_carrier_zone')
+					->withPivot('id', 'min', 'max', 'price');
+	}
+}
