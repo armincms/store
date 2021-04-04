@@ -15,6 +15,7 @@
         "armincms/taxation": "*",
         "davidpiesse/nova-toggle": "~0.0",
         "epartment/nova-dependency-container": "~1.3",
+        "whitecube/nova-flexible-content": "~0.1",
         "zareismail/nova-cascade": "~0.1"
     },
     "autoload": {
