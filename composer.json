@@ -11,6 +11,7 @@
         "armincms/currency": "~0.2",
         "armincms/many-to-many": "~0.2",
         "armincms/armincms": "~0.1",
+        "armincms/categorizable": "~1.2",
         "armincms/taxation": "*",
         "davidpiesse/nova-toggle": "~0.0",
         "epartment/nova-dependency-container": "~1.3",
