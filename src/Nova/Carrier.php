@@ -34,7 +34,7 @@ class Carrier extends Resource
                     ->required()
                     ->rules('required'),
 
-                Text::make(__('Transit Time'), 'name')
+                Text::make(__('Transit Time'), 'transit_time')
                     ->required()
                     ->rules('required'),
             ]),  
