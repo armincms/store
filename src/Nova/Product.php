@@ -4,7 +4,7 @@ namespace Armincms\Store\Nova;
 
 use Illuminate\Http\Request; 
 use Laravel\Nova\Panel;
-use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Http\Requests\{NovaRequest, ResourceIndexRequest};
 use Laravel\Nova\Fields\{ID, Text, Number, Select, BooleanGroup, BelongsTo};
 use Epartment\NovaDependencyContainer\NovaDependencyContainer;
 use Whitecube\NovaFlexibleContent\Flexible as FlexibleField;
@@ -137,22 +137,9 @@ class Product extends Resource
                 $this->tiny(),
             ]),  
 
-            new Panel(__('Product Features'), [
-                tap(FlexibleField::make(__('Product Features'), 'features'), function($flexible) {
-                    $flexible->resolver(Flexible\Resolvers\Feature::class)
-                             ->button(__('Append Feature To Product'))
-                             ->collapsed();
-
-                    Feature::newModel()->with('values')->get()->map(function($feature) use ($flexible) { 
-                        $flexible->addLayout($feature->name, "__{$feature->getKey()}__", [
-                            Select::make(__('Select Feature Value'), 'value')
-                                ->options($feature->values->pluck('value', 'id')->all()),
-
-                            Text::make(__('Or Create Custom Value'), 'custom'),
-                        ]);
-                    });
-                })
-            ]),
+            $this->when(! $request instanceof  ResourceIndexRequest, function() { 
+                return new Fields\Features(__('Product Features'));
+            }),
 
             new Panel(__('Details'), [ 
                 Toggle::make(__('Available For sale'), 'available')
