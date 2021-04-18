@@ -70,6 +70,16 @@ class StoreProduct extends Model implements Categorizable
 	}  
 
 	/**
+	 * Query the realted StoreFeatureValue.
+	 * 
+	 * @return \Illuminate\Database\Elqoeunt\Relations\HasOneOrMany
+	 */
+	public function combinations()
+	{
+		return $this->hasMany(StoreCombination::class, 'product_id');
+	}  
+
+	/**
 	 * Query where "active" attribute is true.
 	 * 
 	 * @return \Illuminate\Database\Elqoeunt\Builder
