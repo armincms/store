@@ -38,6 +38,13 @@ class FeatureValue extends Resource
     public static $title = 'value';
 
     /**
+     * The relationships that should be eager loaded when performing an index query.
+     *
+     * @var array
+     */
+    public static $with = ['feature'];
+
+    /**
      * The columns that should be searched.
      *
      * @var array
@@ -78,6 +85,16 @@ class FeatureValue extends Resource
                     ->rules('required'),
             ]), 
         ];
+    }
+
+    /**
+     * Get the value that should be displayed to represent the resource.
+     *
+     * @return string
+     */
+    public function title()
+    {
+        return (new Feature($this->feature))->title() .': '. parent::title();
     }
 
     /**
