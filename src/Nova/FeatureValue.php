@@ -17,6 +17,45 @@ class FeatureValue extends Resource
     public static $model = \Armincms\Store\Models\StoreFeatureValue::class;  
 
     /**
+     * The number of resources to show per page via relationships.
+     *
+     * @var int
+     */
+    public static $perPageViaRelationship = 25;
+
+    /**
+     * Indicates if the resource should be displayed in the sidebar.
+     *
+     * @var bool
+     */
+    public static $displayInNavigation = false;
+
+    /**
+     * The single value that should be used to represent the resource when being displayed.
+     *
+     * @var string
+     */
+    public static $title = 'value';
+
+    /**
+     * The columns that should be searched.
+     *
+     * @var array
+     */
+    public static $search = [
+        'id', 'value'
+    ]; 
+
+    /**
+     * The columns that should be searched as json.
+     *
+     * @var array
+     */
+    public static $searchJson = [
+        'value'
+    ]; 
+
+    /**
      * Get the fields displayed by the resource.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -50,7 +89,7 @@ class FeatureValue extends Resource
      */
     public static function redirectAfterCreate(NovaRequest $request, $resource)
     {
-        return '/resources/'.static::uriKey();
+        return '/resources/'.Feature::uriKey().'/'.$request->viaResourceId;
     }
 
     /**
@@ -62,6 +101,6 @@ class FeatureValue extends Resource
      */
     public static function redirectAfterUpdate(NovaRequest $request, $resource)
     {
-        return '/resources/'.static::uriKey();
-    }
+        return '/resources/'.Feature::uriKey().'/'.$request->viaResourceId;
+    } 
 }
