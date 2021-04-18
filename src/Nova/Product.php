@@ -27,6 +27,15 @@ class Product extends Resource
     public static $model = \Armincms\Store\Models\StoreProduct::class;  
 
     /**
+     * The columns that should be searched.
+     *
+     * @var array
+     */
+    public static $search = [
+        'id', 'isbn', 'ean', 'upc'
+    ];  
+
+    /**
      * Get the fields displayed by the resource.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -206,6 +215,25 @@ class Product extends Resource
 
             HasMany::make(__('Combinations'), 'combinations', Combination::class),
         ];
+    }
+
+    /**
+     * Apply the search query to the query.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $search
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected static function applySearch($query, $search)
+    {
+        return parent::applySearch($query, $search)->orWhere(function ($query) use ($search) {
+            $query->whereHas('translations', function($query) use ($search) { 
+                $likeOperator = $query->getModel()->getConnection()->getDriverName() == 'pgsql' 
+                                    ? 'ilike' : 'like';
+
+                $query->where($query->qualifyColumn('name'), $likeOperator, '%'.$search.'%');
+            });
+        });
     }
 
     /**
