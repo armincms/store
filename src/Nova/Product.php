@@ -5,7 +5,7 @@ namespace Armincms\Store\Nova;
 use Illuminate\Http\Request; 
 use Laravel\Nova\Panel;
 use Laravel\Nova\Http\Requests\{NovaRequest, ResourceIndexRequest};
-use Laravel\Nova\Fields\{ID, Text, Number, Select, BooleanGroup, BelongsTo};
+use Laravel\Nova\Fields\{ID, Text, Number, Select, BooleanGroup, BelongsTo, HasMany};
 use Epartment\NovaDependencyContainer\NovaDependencyContainer;
 use Whitecube\NovaFlexibleContent\Flexible as FlexibleField;
 use Armincms\Fields\{Targomaan, BelongsToMany};
@@ -171,7 +171,7 @@ class Product extends Resource
                     ->hideFromIndex(),
             ]),
 
-            new Panel(__('Product Shiiping'), [
+            new Panel(__('Product Shipping'), [
                 Number::make(__('Package Width'), 'config->shipping->width')
                     ->min(0)
                     ->nullable()
@@ -203,6 +203,8 @@ class Product extends Resource
                     ->hideFromIndex()
                     ->help(__('If selected any carrier, default carriers will be disabled for the product.'))
             ]),
+
+            HasMany::make(__('Combinations'), 'combinations', Combination::class),
         ];
     }
 
