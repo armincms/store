@@ -23,6 +23,13 @@ class Combination extends Resource
     public static $globallySearchable = false; 
 
     /**
+     * The relationships that should be eager loaded when performing an index query.
+     *
+     * @var array
+     */
+    public static $with = ['values', 'product'];
+
+    /**
      * Get the fields displayed by the resource.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -30,51 +37,19 @@ class Combination extends Resource
      */
     public function fields(Request $request)
     { 
-        return [
+        return array_merge([
             ID::make(__('ID'), 'id')->sortable(),
 
             BelongsTo::make(__('Product'), 'product', Product::class)
                 ->required()
                 ->rules('required')
-                ->withoutTrashed(), 
-
-            BelongsToMany::make(__('Attributes'), 'values', AttributeValue::class) 
+                ->withoutTrashed(),
+                  
+            BelongsToMany::make(__('Attributes'), 'values', \Armincms\Store\Nova\AttributeValue::class) 
                 ->searchable()
                 ->required()
                 ->rules('required'), 
-
-            Number::make(__('Quantity'), 'quantity')
-                ->required()
-                ->rules('required')
-                ->min(0)
-                ->help(__('Quantity of this combination')),
-
-            $this->priceField(__('Impact On Price'))
-                ->required()
-                ->rules('required')
-                ->min(0)
-                ->help(__('How much price will be increased?')),
-
-            Number::make(__('Impact On Weight'), 'weight')
-                ->required()
-                ->rules('required')
-                ->min(0)
-                ->help(__('How much weight will be increased?')),
-
-            Number::make(__('Impact On Width'), 'width')
-                ->required()
-                ->rules('required')
-                ->min(0)
-                ->help(__('How much width will be increased?')),
-
-            Number::make(__('Impact On Height'), 'height')
-                ->required()
-                ->rules('required')
-                ->min(0)
-                ->help(__('How much height will be increased?')),
-
-            Boolean::make(__('Default Combination'), 'default')
-                ->help(__('Default combination on the user purchase.'))
-        ];
+                
+        ], Fields\Combination::fields($request));
     }
 }

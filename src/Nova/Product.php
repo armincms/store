@@ -8,6 +8,7 @@ use Laravel\Nova\Http\Requests\{NovaRequest, ResourceIndexRequest};
 use Laravel\Nova\Fields\{ID, Text, Number, Select, BooleanGroup, BelongsTo, HasMany};
 use Epartment\NovaDependencyContainer\NovaDependencyContainer;
 use Whitecube\NovaFlexibleContent\Flexible as FlexibleField;
+use OptimistDigital\MultiselectField\Multiselect;
 use Armincms\Fields\{Targomaan, BelongsToMany};
 use Zareismail\Fields\BelongsTo as CascadeTo;
 use Davidpiesse\NovaToggle\Toggle;
@@ -107,6 +108,7 @@ class Product extends Resource
                             ->rules('required')
                             ->min(1),
                     ])
+                    ->collapsed()
                     ->required()
                     ->rules('required')
                     ->button(__('Append Product To Package')), 
@@ -157,6 +159,23 @@ class Product extends Resource
             $this->when(! $request instanceof  ResourceIndexRequest, function() { 
                 return new Fields\Features(__('Product Features'));
             }),
+
+            new Panel(__('Combinations'), [
+                FlexibleField::make(__('Product Combinations'), 'combinations')
+                    ->resolver(Flexible\Resolvers\Combination::class)
+                    ->addLayout(__('Combination'), 'combination', array_merge([ 
+                        Multiselect::make(__('Attributes'), 'values')
+                            ->belongsToMany(AttributeValue::class)
+                            ->fillUsing(function($request, $model, $requestAttribute, $attribute) {
+                                $model->{$attribute} = $request->get($attribute);
+                            }),
+
+                    ], Fields\Combination::fields($request)))
+                    ->collapsed()
+                    ->required()
+                    ->rules('required')
+                    ->button(__('New Combination')), 
+            ]),
 
             new Panel(__('Details'), [ 
                 Toggle::make(__('Available For sale'), 'available')
