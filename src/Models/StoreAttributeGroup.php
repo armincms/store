@@ -3,8 +3,8 @@
 namespace Armincms\Store\Models;
       
 
-class StoreAttribute extends Model  
-{  
+class StoreAttributeGroup extends Model  
+{ 	 
     /**
      * Indicates if the model should be timestamped.
      *
@@ -19,16 +19,16 @@ class StoreAttribute extends Model
      */
     public function translator() : string
     {
-        return 'layeric';
+    	return 'layeric';
     }
 
-    /**
-     * Query the related StoreAttributeGroup.
-     * 
-     * @return \Illuminate\Database\Eloqeunt\Builde
-     */
-    public function group()
-    {
-    	return $this->belongsTo(StoreAttributeGroup::class);
-    }
+	/**
+	 * Query the related StoreAttribute.
+	 * 
+	 * @return \Illuminate\Database\Eloqeunt\Builder
+	 */
+	public function attributes()
+	{
+		return $this->hasMany(StoreAttribute::class, 'group_id');
+	}
 }

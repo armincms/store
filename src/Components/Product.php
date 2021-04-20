@@ -50,8 +50,8 @@ class Product extends Component implements Resourceable
 		return $this->resource->owner;
 	}
 
-	public function featuredImage($schema = 'main')
+	public function images($schema = 'product-mid')
 	{
-		return $this->resource->featuredImage($schema);
+		return $this->resource->galleryImages()->pluck($schema)->flatten()->all();
 	}
 }

@@ -6,13 +6,13 @@ use Armincms\Categorizable\Contracts\Categorizable;
 use Armincms\Categorizable\Concerns\InteractsWithCategories;
 use Core\Crud\Concerns\SearchEngineOptimizeTrait;
 use Core\HttpSite\Concerns\IntractsWithSite; 
-use Armincms\Concerns\InteractsWithLayouts; 
+use Armincms\Concerns\{HasConfig, InteractsWithLayouts}; 
 use Core\HttpSite\Component;  
 
 
 class StoreProduct extends Model implements Categorizable
 { 	  
-	use \Armincms\Concerns\HasConfig, InteractsWithLayouts, IntractsWithSite, SearchEngineOptimizeTrait;
+	use HasConfig, InteractsWithLayouts, IntractsWithSite, SearchEngineOptimizeTrait;
 
 	protected $medias = [
         'gallery' => [  
@@ -133,4 +133,13 @@ class StoreProduct extends Model implements Categorizable
     {
     	return new \Armincms\Store\Components\Product;
     }
+
+    public function galleryImages()
+    { 
+    	return $this->getMedia('gallery')->map(function($media) {
+    		return $this->getConversions($media, config('blog.schemas', [
+    			'product-larg', 'product-mid', 'product-thumbnail'
+    		]));
+    	});
+    } 
 }

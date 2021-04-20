@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema; 
+use Illuminate\Support\Facades\Schema;
 
 class CreateStoreAttributesTable extends Migration
 {
@@ -15,10 +15,12 @@ class CreateStoreAttributesTable extends Migration
     {
         Schema::create('store_attributes', function (Blueprint $table) {
             $table->bigIncrements('id'); 
-            $table->json('name'); 
-            $table->string('field')->default(\Laravel\Nova\Fields\Text::class); 
-            $table->timestamps();
+            $table->unsignedBigInteger('group_id'); 
+            $table->string('color')->nullable();
+            $table->string('texture')->nullable();
             $table->softDeletes();
+
+            $table->foreign('group_id')->references('id')->on('store_attribute_groups');
         });
     }
 
