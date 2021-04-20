@@ -37,7 +37,7 @@ class AttributeGroup extends Resource
      *
      * @var array
      */
-    public static $searchTranslation = [ 
+    public static $searchTranslations = [ 
         'name'
     ]; 
 
