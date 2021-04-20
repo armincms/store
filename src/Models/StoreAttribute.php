@@ -31,4 +31,14 @@ class StoreAttribute extends Model
     {
     	return $this->belongsTo(StoreAttributeGroup::class);
     }
+
+    /**
+     * Query the related StoreCombination.
+     * 
+     * @return \Illuminate\Database\Eloqeunt\Reltaions\BelongsToMany
+     */
+    public function combinations()
+    {
+        return $this->belongsToMany(StoreAttribute::class, 'store_attribute_combination');
+    }
 }

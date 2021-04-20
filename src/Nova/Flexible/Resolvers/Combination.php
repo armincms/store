@@ -17,13 +17,13 @@ class Combination implements ResolverInterface
      */
     public function get($resource, $attribute, $layouts)
     {  
-        return $resource->combinations()->with('values')->get()->map(function($combination) use ($layouts) {
+        return $resource->combinations()->with('attributes')->get()->map(function($combination) use ($layouts) {
             $layout = $layouts->find('combination');
 
             if(!$layout) return;
 
             return $layout->duplicateAndHydrate($combination->id, array_merge($combination->toArray(), [ 
-                'values' => $combination->values,
+                'attributes' => $combination->attributes,
             ]));
         })->filter();
 
@@ -41,15 +41,15 @@ class Combination implements ResolverInterface
     { 
         $model::saved(function ($model) use ($groups) { 
             $groups->map->getAttributes()->sortBy(function($attributes) {
-                // when updating values we make uniquify with the values relationship
-                // so we sort by values count to ensure joint values do not override others 
-                return count($attributes['values'] ?? []);
+                // when updating attributes we make uniquify with the attributes relationship
+                // so we sort by attributes count to ensure joint attributes do not override others 
+                return count($attributes['attributes'] ?? []);
             })->each(function($attributes) use ($model) { 
-                $combination = $model->combinations()->whereHas('values', function($query) use ($attributes) {
-                    $query->whereKey($attributes['values'] ?? []);
-                }, count($attributes['values'] ?? []))->updateOrCreate([], $attributes);
+                $combination = $model->combinations()->whereHas('attributes', function($query) use ($attributes) {
+                    $query->whereKey($attributes['attributes'] ?? []);
+                }, count($attributes['attributes'] ?? []))->updateOrCreate([], $attributes);
 
-                $combination->values()->sync($attributes['values'] ?? []); 
+                $combination->attributes()->sync($attributes['attributes'] ?? []); 
             }); 
         });
         

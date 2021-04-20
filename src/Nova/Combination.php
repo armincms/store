@@ -27,7 +27,7 @@ class Combination extends Resource
      *
      * @var array
      */
-    public static $with = ['values', 'product'];
+    public static $with = ['attributes', 'product'];
 
     /**
      * Get the fields displayed by the resource.
@@ -45,7 +45,7 @@ class Combination extends Resource
                 ->rules('required')
                 ->withoutTrashed(),
                   
-            BelongsToMany::make(__('Attributes'), 'values', \Armincms\Store\Nova\AttributeValue::class) 
+            BelongsToMany::make(__('Attributes'), 'attributes', \Armincms\Store\Nova\Attribute::class) 
                 ->searchable()
                 ->required()
                 ->rules('required'), 

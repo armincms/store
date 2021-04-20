@@ -160,22 +160,23 @@ class Product extends Resource
                 return new Fields\Features(__('Product Features'));
             }),
 
-            // new Panel(__('Combinations'), [
-            //     FlexibleField::make(__('Product Combinations'), 'combinations')
-            //         ->resolver(Flexible\Resolvers\Combination::class)
-            //         ->addLayout(__('Combination'), 'combination', array_merge([ 
-            //             Multiselect::make(__('Attributes'), 'values')
-            //                 ->belongsToMany(AttributeValue::class)
-            //                 ->fillUsing(function($request, $model, $requestAttribute, $attribute) {
-            //                     $model->{$attribute} = $request->get($attribute);
-            //                 }),
+            new Panel(__('Combinations'), [
+                FlexibleField::make(__('Product Combinations'), 'combinations')
+                    ->resolver(Flexible\Resolvers\Combination::class)
+                    ->addLayout(__('Combination'), 'combination', array_merge([ 
+                        Multiselect::make(__('Attributes'), 'attributes')
+                            ->belongsToMany(Attribute::class)
+                            ->fillUsing(function($request, $model, $requestAttribute, $attribute) {
+                                $model->{$attribute} = $request->get($attribute);
+                            }),
 
-            //         ], Fields\Combination::fields($request)))
-            //         ->collapsed()
-            //         ->required()
-            //         ->rules('required')
-            //         ->button(__('New Combination')), 
-            // ]),
+                    ], Fields\Combination::fields($request)))
+                    ->collapsed()
+                    ->required()
+                    ->rules('required')
+                    ->button(__('New Combination'))
+                    ->onlyOnForms(), 
+            ]),
 
             new Panel(__('Details'), [ 
                 Toggle::make(__('Available For sale'), 'available')
@@ -240,7 +241,7 @@ class Product extends Resource
                     ->help(__('If selected any carrier, default carriers will be disabled for the product.'))
             ]),
 
-            // HasMany::make(__('Combinations'), 'combinations', Combination::class),
+            HasMany::make(__('Combinations'), 'combinations', Combination::class),
         ];
     }
 

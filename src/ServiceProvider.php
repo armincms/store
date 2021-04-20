@@ -35,7 +35,7 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
             Nova\Feature::class,
             Nova\Category::class,
             Nova\Attribute::class,
-            // Nova\Combination::class,
+            Nova\Combination::class,
             Nova\FeatureValue::class,
             Nova\AttributeGroup::class,
         ]);
