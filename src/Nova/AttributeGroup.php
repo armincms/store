@@ -33,6 +33,15 @@ class AttributeGroup extends Resource
     ]; 
 
     /**
+     * The columns that should be searched as json.
+     *
+     * @var array
+     */
+    public static $searchTranslation = [ 
+        'name'
+    ]; 
+
+    /**
      * Get the fields displayed by the resource.
      *
      * @param  \Illuminate\Http\Request  $request

@@ -63,6 +63,15 @@ class Attribute extends Resource
     ]; 
 
     /**
+     * The columns that should be searched as json.
+     *
+     * @var array
+     */
+    public static $searchTranslation = [ 
+        'value'
+    ]; 
+
+    /**
      * Get the fields displayed by the resource.
      *
      * @param  \Illuminate\Http\Request  $request

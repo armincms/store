@@ -37,7 +37,7 @@ abstract class Resource extends BaseResource
      * @var array
      */
     public static $search = [
-        'id', 'name'
+        'id'
     ];  
 
     /**
@@ -48,6 +48,66 @@ abstract class Resource extends BaseResource
     public static $searchJson = [
         'name'
     ]; 
+
+    /**
+     * The columns that should be searched as json.
+     *
+     * @var array
+     */
+    public static $searchTranslation = [
+
+    ]; 
+
+    /**
+     * Apply the search query to the query.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $search
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected static function applySearch($query, $search)
+    {
+        $columns = static::searchableTranslationColumns();
+
+        return parent::applySearch($query, $search)->when(! empty($columns), function($query) use ($search) {
+            $query->orWhere(function ($query) use ($search) {
+                $query->whereHas('translations', function($query) use ($search) { 
+                    $query->where(function($query) use ($search) {
+                        static::applyTranslationSearch($query, $search);
+                    }); 
+                });
+            });
+        });
+    }
+
+    /**
+     * Apply the search query to the query.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $search
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public static function applyTranslationSearch($query, $search)
+    {
+        $likeOperator = $query->getModel()->getConnection()->getDriverName() == 'pgsql' 
+                                    ? 'ilike' : 'like';
+
+        foreach (static::searchableTranslationColumns() as $column) {
+            $query->orWhere($query->qualifyColumn($column), $likeOperator, '%'.$search.'%');
+        }
+
+        return $query;
+    }
+
+    /**
+     * Get the searchable columns for the resource.
+     *
+     * @return array
+     */
+    public static function searchableTranslationColumns()
+    {
+        return static::$searchTranslation;
+    }
 
     /**
      * Get the cards available for the request.

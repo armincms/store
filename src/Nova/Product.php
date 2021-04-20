@@ -45,6 +45,15 @@ class Product extends Resource
     ]; 
 
     /**
+     * The columns that should be searched as json.
+     *
+     * @var array
+     */
+    public static $searchTranslation = [ 
+        'name'
+    ]; 
+
+    /**
      * Get the fields displayed by the resource.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -243,26 +252,7 @@ class Product extends Resource
 
             HasMany::make(__('Combinations'), 'combinations', Combination::class),
         ];
-    }
-
-    /**
-     * Apply the search query to the query.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $search
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    protected static function applySearch($query, $search)
-    {
-        return parent::applySearch($query, $search)->orWhere(function ($query) use ($search) {
-            $query->whereHas('translations', function($query) use ($search) { 
-                $likeOperator = $query->getModel()->getConnection()->getDriverName() == 'pgsql' 
-                                    ? 'ilike' : 'like';
-
-                $query->where($query->qualifyColumn('name'), $likeOperator, '%'.$search.'%');
-            });
-        });
-    }
+    } 
 
     /**
      * Get the filters available for the resource.
