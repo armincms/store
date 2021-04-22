@@ -138,6 +138,12 @@ class Product extends Resource
                 ->hideFromIndex()
                 ->nullable(),
 
+            BelongsTo::make(__('Product Brand'), 'brand', Brand::class)
+                ->showCreateRelationButton()
+                ->withoutTrashed()
+                ->hideFromIndex()
+                ->nullable(),
+
             BelongsToMany::make(__('Product Categories'), 'categories', Category::class)
                 ->required()
                 ->rules('required')
