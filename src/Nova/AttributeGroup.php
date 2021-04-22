@@ -72,4 +72,14 @@ class AttributeGroup extends Resource
             HasMany::make(__('Attributes'), 'attributes', Attribute::class),
         ];
     }
+
+    /**
+     * Get the displayable label of the resource.
+     *
+     * @return string
+     */
+    public static function label()
+    {
+        return Attribute::label();
+    }
 }
