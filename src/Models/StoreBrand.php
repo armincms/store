@@ -12,5 +12,15 @@ class StoreBrand extends Model
                 'logo'
             ]
         ], 
-	];  
+	]; 
+
+	/**
+	 * Query the related StoreProduct.
+	 * 
+	 * @return \Illuminate\Database\Eloqeunt\Reltaions\HasOneOrMany
+	 */
+	public function products()
+	{
+		return $this->hasMany(StoreProduct::class, 'brand_id');
+	} 
 }

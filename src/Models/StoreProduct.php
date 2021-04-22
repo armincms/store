@@ -57,6 +57,16 @@ class StoreProduct extends Model implements Categorizable
 	public function tax()
 	{
 		return $this->belongsTo(\Armincms\Taxation\Models\TaxationRule::class);
+	}
+
+	/**
+	 * Query the realted StoreBrand.
+	 * 
+	 * @return \Illuminate\Database\Elqoeunt\Relations\BelongsTo
+	 */
+	public function brand()
+	{
+		return $this->belongsTo(StoreBrand::class);
 	} 
 
 	/**
