@@ -17,6 +17,13 @@ class Brand extends Resource
     public static $model = \Armincms\Store\Models\StoreBrand::class;  
 
     /**
+     * The relationships that should be eager loaded when performing delete query.
+     *
+     * @var array
+     */ 
+    public static $preventDelete = ['products']; 
+
+    /**
      * Get the fields displayed by the resource.
      *
      * @param  \Illuminate\Http\Request  $request
