@@ -23,4 +23,14 @@ class StoreFeatureValue extends Model
     {
     	return $this->belongsTo(StoreFeature::class);
     }
+
+    /**
+     * Query the related StoreFeature.
+     * 
+     * @return \Illuminate\Database\Eloqeunt\Builde
+     */
+    public function products()
+    {
+        return $this->belongsToMany(StoreProduct::class, 'store_feature_value_product');
+    }
 }

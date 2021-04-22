@@ -63,6 +63,13 @@ class FeatureValue extends Resource
     ]; 
 
     /**
+     * The relationships that should be eager loaded when performing delete query.
+     *
+     * @var array
+     */ 
+    public static $preventDelete = ['products']; 
+
+    /**
      * Get the fields displayed by the resource.
      *
      * @param  \Illuminate\Http\Request  $request

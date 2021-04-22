@@ -3,6 +3,7 @@
 namespace Armincms\Store\Nova;
 
 use Illuminate\Http\Request; 
+use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Fields\{ID, Text, Number, Select, HasMany};
 use Armincms\Fields\Targomaan;
 
@@ -13,7 +14,7 @@ class AttributeGroup extends Resource
      *
      * @var string
      */
-    public static $model = \Armincms\Store\Models\StoreAttributeGroup::class;  
+    public static $model = \Armincms\Store\Models\StoreAttributeGroup::class;   
 
     /**
      * The columns that should be searched.
@@ -40,6 +41,13 @@ class AttributeGroup extends Resource
     public static $searchTranslations = [ 
         'name'
     ]; 
+
+    /**
+     * The relationships that should be eager loaded when performing delete query.
+     *
+     * @var array
+     */ 
+    public static $preventDelete = ['attributes']; 
 
     /**
      * Get the fields displayed by the resource.

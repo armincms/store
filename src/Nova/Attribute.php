@@ -46,6 +46,13 @@ class Attribute extends Resource
     public static $with = ['group'];
 
     /**
+     * The relationships that should be eager loaded when performing delete query.
+     *
+     * @var array
+     */ 
+    public static $preventDelete = ['combinations']; 
+
+    /**
      * The columns that should be searched.
      *
      * @var array
@@ -69,7 +76,7 @@ class Attribute extends Resource
      */
     public static $searchTranslations = [ 
         'value'
-    ]; 
+    ];  
 
     /**
      * Get the fields displayed by the resource.
@@ -148,5 +155,5 @@ class Attribute extends Resource
     public static function redirectAfterUpdate(NovaRequest $request, $resource)
     {
         return '/resources/'.AttributeGroup::uriKey().'/'.$request->viaResourceId;
-    } 
+    }  
 }

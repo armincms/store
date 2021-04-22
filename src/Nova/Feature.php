@@ -13,7 +13,14 @@ class Feature extends Resource
      *
      * @var string
      */
-    public static $model = \Armincms\Store\Models\StoreFeature::class;  
+    public static $model = \Armincms\Store\Models\StoreFeature::class;
+
+    /**
+     * The relationships that should be eager loaded when performing delete query.
+     *
+     * @var array
+     */ 
+    public static $preventDelete = ['values'];   
 
     /**
      * Get the fields displayed by the resource.
