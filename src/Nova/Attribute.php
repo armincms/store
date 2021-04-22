@@ -100,6 +100,7 @@ class Attribute extends Resource
             $this->mergeWhen($this->isColorGroup($request), function() {
                 return [
                     Swatches::make(__('Attribute Color'), 'color')
+                        ->showFallback('color')
                         ->nullable(),
 
                     Image::make(__('Attribute Texture'), 'texture')
