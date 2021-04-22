@@ -2,6 +2,7 @@
 
 namespace Armincms\Store;
 
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider; 
 use Laravel\Nova\Nova as LaravelNova; 
@@ -17,7 +18,8 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
     public function register()
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        $this->configureWebComponents();
+        $this->configureWebComponents(); 
+        $this->registerPolicies(); 
 
         $this->app->resolving('conversion', function($manager) {
             $manager->extend('logo', function() {
@@ -49,6 +51,18 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
             $store->pushComponent(new Components\Product); 
             $store->pushComponent(new Components\Category); 
         });
+    }
+
+    public function registerPolicies()
+    { 
+        Gate::policy(Models\StoreBrand::class, Policies\Policy::class);
+        Gate::policy(Models\StoreFeature::class, Policies\Policy::class);
+        Gate::policy(Models\StoreProduct::class, Policies\Policy::class);
+        Gate::policy(Models\StoreCarrier::class, Policies\Policy::class);
+        Gate::policy(Models\StoreAttribute::class, Policies\Policy::class); 
+        Gate::policy(Models\StoreCombination::class, Policies\Policy::class); 
+        Gate::policy(Models\StoreFeatureValue::class, Policies\Policy::class);
+        Gate::policy(Models\StoreAttributeGroup::class, Policies\Policy::class);
     }
 
     /**
