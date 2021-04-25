@@ -2,6 +2,7 @@
 
 namespace Armincms\Store\Models; 
 
+use Illuminate\Database\Eloquent\SoftDeletes; 
 use Armincms\Categorizable\Contracts\Categorizable;
 use Armincms\Categorizable\Concerns\InteractsWithCategories;
 use Core\Crud\Concerns\SearchEngineOptimizeTrait;
@@ -12,7 +13,7 @@ use Core\HttpSite\Component;
 
 class StoreProduct extends Model implements Categorizable
 { 	  
-	use HasConfig, InteractsWithLayouts, IntractsWithSite, SearchEngineOptimizeTrait;
+	use SoftDeletes, HasConfig, InteractsWithLayouts, IntractsWithSite, SearchEngineOptimizeTrait;
 
 	protected $medias = [
         'gallery' => [  
