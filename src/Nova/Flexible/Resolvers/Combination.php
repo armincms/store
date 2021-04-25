@@ -40,7 +40,9 @@ class Combination implements ResolverInterface
     public function set($model, $attribute, $groups)
     { 
         $model::saved(function ($model) use ($groups) { 
-            $groups->map->getAttributes()->sortBy(function($attributes) {
+            $groups->map->getAttributes()->filter(function($attributes) { 
+                return isset($attributes['attributes']) && ! empty($attributes['attributes']);
+            })->sortBy(function($attributes) {
                 // when updating attributes we make uniquify with the attributes relationship
                 // so we sort by attributes count to ensure joint attributes do not override others 
                 return count($attributes['attributes'] ?? []);
@@ -51,6 +53,10 @@ class Combination implements ResolverInterface
 
                 $combination->attributes()->sync($attributes['attributes'] ?? []); 
             }); 
+
+            $model->combinations()->whereDoesntHave('attributes', function($query) use ($groups) {
+                $query->whereKey($groups->map->getAttributes()->flatMap->attributes->all());
+            })->delete(); 
         });
         
     }
