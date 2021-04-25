@@ -26,7 +26,8 @@ class CreateStoreCombinationsTable extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('product_id')->references('id')->on('store_products');     
+            $table->foreign('product_id')
+                  ->references('id')->on('store_products');     
         }); 
     }
 

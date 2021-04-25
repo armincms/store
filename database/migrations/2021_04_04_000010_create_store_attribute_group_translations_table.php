@@ -20,7 +20,8 @@ class CreateStoreAttributeGroupTranslationsTable extends Migration
             $table->unsignedBigInteger('store_attribute_group_id');
 
             $table->foreign('store_attribute_group_id', 'sagt_sag_id_foreign')
-                ->references('id')->on('store_attribute_groups');
+                ->references('id')->on('store_attribute_groups')
+                ->onDelete('cascade');
         });
     }
 

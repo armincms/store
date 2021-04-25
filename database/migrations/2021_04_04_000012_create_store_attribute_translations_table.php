@@ -19,7 +19,9 @@ class CreateStoreAttributeTranslationsTable extends Migration
             $table->visiting(); 
             $table->unsignedBigInteger('store_attribute_id'); 
 
-            $table->foreign('store_attribute_id')->references('id')->on('store_attributes');
+            $table->foreign('store_attribute_id')
+                ->references('id')->on('store_attributes')
+                ->onDelete('cascade');
         });
     }
 

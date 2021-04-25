@@ -4,7 +4,7 @@ namespace Armincms\Store\Models;
 
 use Illuminate\Support\Str; 
 use Illuminate\Support\Collection; 
-use Illuminate\Database\Eloquent\{Model as LaravelModel, Builder, SoftDeletes}; 
+use Illuminate\Database\Eloquent\{Model as LaravelModel, Builder}; 
 use Armincms\Concerns\{HasMediaTrait, Authorization};
 use Armincms\Contracts\Authorizable; 
 use Armincms\Targomaan\Concerns\InteractsWithTargomaan;
@@ -13,7 +13,7 @@ use Spatie\MediaLibrary\HasMedia\HasMedia;
 
 class Model extends LaravelModel implements HasMedia, Translatable
 {
-    use SoftDeletes, InteractsWithTargomaan, HasMediaTrait; 
+    use InteractsWithTargomaan, HasMediaTrait; 
 
     const LOCALE_KEY = 'language'; 
 
