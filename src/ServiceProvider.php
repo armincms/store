@@ -41,6 +41,8 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
             Nova\FeatureValue::class,
             Nova\AttributeGroup::class,
         ]);
+
+        LaravelNova::script('armincms-store-scrips', __DIR__.'/../dist/js/field.js');
     }
 
     public function configureWebComponents()

@@ -257,6 +257,8 @@ class Product extends Resource
             ]),
 
             HasMany::make(__('Combinations'), 'combinations', Combination::class),
+
+            Fields\Scripts::make(),
         ];
     } 
 
