@@ -11,6 +11,7 @@ use Whitecube\NovaFlexibleContent\Flexible as FlexibleField;
 use OptimistDigital\MultiselectField\Multiselect;
 use Armincms\Fields\{Targomaan, BelongsToMany};
 use Zareismail\Fields\BelongsTo as CascadeTo;
+use Armincms\Taggable\Nova\Fields\Tags;
 use Davidpiesse\NovaToggle\Toggle;
 use Armincms\Taxation\Nova\Rule;
 use Armincms\Store\Helper;
@@ -148,6 +149,9 @@ class Product extends Resource
                 ->required()
                 ->rules('required')
                 ->hideFromIndex(),
+
+            Tags::make(__('Product Tags'), 'tags') 
+                ->hideFromIndex(),
                 
             $this->priceField()->required()->rules('required')->min(0),
 
@@ -186,9 +190,7 @@ class Product extends Resource
                             }),
 
                     ], Fields\Combination::fields($request)))
-                    ->collapsed()
-                    ->required()
-                    ->rules('required')
+                    ->collapsed() 
                     ->button(__('New Combination'))
                     ->onlyOnForms(), 
             ]),
