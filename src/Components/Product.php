@@ -28,7 +28,7 @@ class Product extends Component implements Resourceable
 	{       
 		$product = StoreProduct::active()->whereHas('translations', function($query) use ($request) {
 			$query->whereUrl($request->relativeUrl());
-		})->firstOrFail(); 
+		})->firstOrFail()->load('values.feature', 'categories', 'tags'); 
 		
 		$this->resource($product);   
 		$docuemnt->title($product->metaTitle()?: $product->title); 
@@ -37,12 +37,17 @@ class Product extends Component implements Resourceable
 		$docuemnt->keywords($product->getMeta('keywords')?: ''/*$product->tags->map->tag->implode(',')*/);  
 		
 		return (string) $this->firstLayout($docuemnt, $this->config('layout'), 'clean-product')
-					->display($product->toArray(), $docuemnt->component->config('layout', [])); 
+					->display($product->toArray(), (array) $docuemnt->component->config()); 
 	}    
 
 	public function categories()
 	{
 		return $this->resource->categories;
+	} 
+
+	public function tags()
+	{
+		return $this->resource->tags;
 	}
 
 	public function author()
@@ -50,8 +55,25 @@ class Product extends Component implements Resourceable
 		return $this->resource->owner;
 	}
 
+	public function currency()
+	{
+		return config('nova.currency');
+	}
+
+	public function gallery()
+	{
+		return $this->resource->galleryImages();
+	}
+
 	public function images($schema = 'product-mid')
 	{
-		return $this->resource->galleryImages()->pluck($schema)->flatten()->all();
+		return $this->gallery()->pluck($schema)->flatten()->all();
+	}
+
+	public function values()
+	{
+		return $this->resource->values->groupBy('feature.name')->map(function($values) {
+			return $values->map->value;
+		})->toArray();
 	}
 }
