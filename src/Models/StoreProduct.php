@@ -142,6 +142,76 @@ class StoreProduct extends Model implements Categorizable, Orderable, Saleable
 		return $query->whereDisplayPrice(true);
 	} 
 
+	/**
+	 * Query where "product_type" attribute is 'physical'.
+	 * 
+	 * @return \Illuminate\Database\Elqoeunt\Builder
+	 */
+	public function scopePhysicalProduct($query)
+	{
+		return $query->where($query->qualifyColumn('product_type'), 'physical');
+	} 
+
+	/**
+	 * Query where "product_type" attribute is 'virtual'.
+	 * 
+	 * @return \Illuminate\Database\Elqoeunt\Builder
+	 */
+	public function scopeVirtualProduct($query)
+	{
+		return $query->where($query->qualifyColumn('product_type'), 'virtual');
+	} 
+
+	/**
+	 * Query where "product_type" attribute is 'package'.
+	 * 
+	 * @return \Illuminate\Database\Elqoeunt\Builder
+	 */
+	public function scopePackageProduct($query)
+	{
+		return $query->where($query->qualifyColumn('product_type'), 'package');
+	}
+
+	/**
+	 * Query where "product_status" attribute is 'old'.
+	 * 
+	 * @return \Illuminate\Database\Elqoeunt\Builder
+	 */
+	public function scopeOldProduct($query)
+	{
+		return $query->where($query->qualifyColumn('product_status'), 'old');
+	} 
+
+	/**
+	 * Query where "product_status" attribute is 'new'.
+	 * 
+	 * @return \Illuminate\Database\Elqoeunt\Builder
+	 */
+	public function scopeNewProduct($query)
+	{
+		return $query->where($query->qualifyColumn('product_status'), 'new');
+	} 
+
+	/**
+	 * Query where "product_status" attribute is 'repaired'.
+	 * 
+	 * @return \Illuminate\Database\Elqoeunt\Builder
+	 */
+	public function scopeRepairedProduct($query)
+	{
+		return $query->where($query->qualifyColumn('product_status'), 'repaired');
+	} 
+
+	/**
+	 * Query where "brand_id" attribute in the given brands.
+	 * 
+	 * @return \Illuminate\Database\Elqoeunt\Builder
+	 */
+	public function scopeBrandedBy($query, $brands = [])
+	{
+		return $query->whereIn($query->qualifyColumn('brand_id'), (array) $brands);
+	} 
+
     /**
      * Get the tag url.
      * 
