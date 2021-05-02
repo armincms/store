@@ -77,11 +77,11 @@ class Product extends Resource
                 });
             }), 
 
-            Url::make(__('Product Name'), 'url')
+            Url::make(__('Product Name'), 'id')
                 ->exceptOnForms()
                 ->alwaysClickable() 
                 ->resolveUsing(function($value, $resource, $attribute) use ($request) {
-                    return app('site')->findByComponent($request->model()->component())->url(urldecode($value));
+                    return $this->url();
                 }) 
                 ->labelUsing(function() {
                     return $this->name;
