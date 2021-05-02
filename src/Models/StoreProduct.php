@@ -9,10 +9,11 @@ use Armincms\Taggable\Concerns\InteractsWithTags;
 use Core\Crud\Concerns\SearchEngineOptimizeTrait;
 use Core\HttpSite\Concerns\IntractsWithSite; 
 use Armincms\Concerns\{HasConfig, InteractsWithLayouts}; 
+use Armincms\Orderable\Contracts\{Orderable, Saleable};
 use Core\HttpSite\Component;  
 
 
-class StoreProduct extends Model implements Categorizable
+class StoreProduct extends Model implements Categorizable, Orderable, Saleable
 { 	  
 	use SoftDeletes, HasConfig, InteractsWithLayouts, IntractsWithSite, SearchEngineOptimizeTrait, InteractsWithTags;
 
@@ -26,7 +27,7 @@ class StoreProduct extends Model implements Categorizable
         ], 
 	];  
 
-	protected $translator = 'layeric';
+	protected $translator = 'layeric'; 
 
 	const TRANSLATION_MODEL = StoreProductTranslation::class;
 
@@ -139,7 +140,17 @@ class StoreProduct extends Model implements Categorizable
 	public function scopeDisplayPrice($query)
 	{
 		return $query->whereDisplayPrice(true);
-	}
+	} 
+
+    /**
+     * Get the tag url.
+     * 
+     * @return string
+     */
+    public function url(): string
+    {
+        return $this->site()->url(urldecode($this->getTranslation('url')));
+    }
 
     public function component() : Component
     {
@@ -154,4 +165,75 @@ class StoreProduct extends Model implements Categorizable
     		]));
     	});
     } 
+
+
+	/**
+	 * Get the sale price currency.
+	 * 
+	 * @return decimal
+	 */
+	public function saleCurrency(): string
+	{
+		return config('nova.currency', 'IRR');
+	}
+
+	/**
+	 * Get the sale price of the item.
+	 * 
+	 * @return decimal
+	 */
+	public function salePrice(): float
+	{
+		return $this->price;
+	}
+
+	/**
+	 * Get the real price of the item.
+	 * 
+	 * @return decimal
+	 */
+	public function oldPrice(): float
+	{
+		return $this->price;
+	}
+
+	/**
+	 * Get the item name.
+	 * 
+	 * @return decimal
+	 */
+	public function getNameAttribute()
+	{
+		return $this->getTranslation('name');
+	}
+
+	/**
+	 * Get the item name.
+	 * 
+	 * @return decimal
+	 */
+	public function saleName(): string
+	{
+		return $this->name;
+	}
+
+	/**
+	 * Get the item summary.
+	 * 
+	 * @return decimal
+	 */
+	public function getSummaryAttribute()
+	{
+		return $this->getTranslation('summary');
+	}
+
+	/**
+	 * Get the item description.
+	 * 
+	 * @return decimal
+	 */
+	public function saleDescription(): string
+	{
+		return $this->summary;
+	}
 }
