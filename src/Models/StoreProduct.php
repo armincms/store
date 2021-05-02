@@ -236,4 +236,20 @@ class StoreProduct extends Model implements Categorizable, Orderable, Saleable
 	{
 		return $this->summary;
 	}
+
+
+    /**
+     * Convert the model instance to an array.
+     *  
+     * @return array
+     */ 
+    public function toArray(): array
+    {
+    	return array_merge(parent::toArray(), [
+    		'url' => $this->url(),
+    		'sale_price' => $this->salePrice(),
+    		'old_price' => $this->oldPrice(),
+    		'gallery' => $this->galleryImages(),
+    	]);
+    }
 }
