@@ -22,7 +22,7 @@ class ProductConversion extends Conversion
                 'extension'     => null, // save extension
                 'placeholder'   => image_placeholder(1024, 578),
                 'label'         => __('Common larg image'),
-                'manipulations' => ['fit' => \Spatie\Image\Manipulations::FIT_MAX], 
+                'manipulations' => ['fit' => \Spatie\Image\Manipulations::FIT_FILL], 
             ],
             'mid' => [   
                 'width'         => 578,
@@ -32,7 +32,7 @@ class ProductConversion extends Conversion
                 'extension'     => null, // save extension
                 'placeholder'   => image_placeholder(578, 320),
                 'label'         => __('Common mid image'),
-                'manipulations' => ['fit' => \Spatie\Image\Manipulations::FIT_MAX], 
+                'manipulations' => ['fit' => \Spatie\Image\Manipulations::FIT_FILL], 
             ],
             'thumbnail' => [  
                 'width'         => 320,
@@ -42,7 +42,7 @@ class ProductConversion extends Conversion
                 'extension'     => null, // save extension
                 'placeholder'   => image_placeholder(320, 217),
                 'label'         => __('Common thumbnail image'),
-                'manipulations' => ['fit' => \Spatie\Image\Manipulations::FIT_MAX], 
+                'manipulations' => ['fit' => \Spatie\Image\Manipulations::FIT_FILL], 
             ], 
         ], parent::schemas());
     }
