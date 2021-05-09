@@ -236,6 +236,11 @@ class StoreProduct extends Model implements Categorizable, Orderable, Saleable
     	});
     } 
 
+    public function featuredImage($conversion = 'product-thumbnail')
+    { 
+    	return data_get($this->galleryImages()->first(), $conversion);
+    } 
+
 
 	/**
 	 * Get the sale price currency.

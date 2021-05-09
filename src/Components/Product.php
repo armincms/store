@@ -75,5 +75,10 @@ class Product extends Component implements Resourceable
 		return $this->resource->values->groupBy('feature.name')->map(function($values) {
 			return $values->map->value;
 		})->toArray();
+	}  
+
+	public function middlewares()
+	{
+		return ['web'];
 	}
 }

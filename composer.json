@@ -30,7 +30,10 @@
         "laravel": {
             "providers": [
                 "Armincms\\Store\\ServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "ShoppingCart": "Armincms\\Store\\Facades\\ShoppingCart"
+            }
         }
     },
     "config": {
