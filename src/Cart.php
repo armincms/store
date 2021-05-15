@@ -133,7 +133,17 @@ class Cart
 	 */
 	public function all()
 	{
-		return $this->items;
+		return array_filter($this->items);
+	}
+
+	/**
+	 * Return all of the available items.
+	 * 
+	 * @return array
+	 */
+	public function count(int $productId)
+	{  
+		return intval($this->items[$productId] ?? 0);
 	}
 
 	/**

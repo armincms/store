@@ -14,7 +14,7 @@ class CartController extends Controller
 	public function push(Request $request)
 	{
 	 	$request->validate([
-	 		'quantity' => 'required|min:1',
+	 		'quantity' => 'numeric',
 	 		'product' => ['required', function($attribute, $value, $fail) {
 	 			return StoreProduct::active()->whereKey($value)->firstOr(function() use ($fail) {
 	 				return $fail(__('Requested Product Not Found.'));
@@ -22,15 +22,14 @@ class CartController extends Controller
 	 		}],
 	 	]); 
 
-	 	app('store.cart')->add($request->get('product'), $request->get('quantity')); 
+	 	app('store.cart')->add($request->get('product'), $request->get('quantity'));  
 
-	 	return redirect()->route('store.cart');
+	 	return $this->response($request);
 	}
 
 	public function remove(Request $request)
 	{
 	 	$request->validate([
-	 		'quantity' => 'required|min:1',
 	 		'product' => ['required', function($attribute, $value, $fail) {
 	 			return StoreProduct::active()->whereKey($value)->firstOr(function() use ($fail) {
 	 				return $fail(__('Requested Product Not Found.'));
@@ -38,9 +37,11 @@ class CartController extends Controller
 	 		}],
 	 	]); 
 
-	 	app('store.cart')->decrement($request->get('product'), $request->get('quantity')); 
+	 	$quantity = $request->get('quantity') ?: \ShoppingCart::count($request->get('product'));
 
-	 	return redirect()->route('store.cart');
+	 	app('store.cart')->decrement($request->get('product'), $quantity); 
+
+	 	return $this->response($request); 
 	}
 
 	public function update(Request $request)
@@ -56,6 +57,13 @@ class CartController extends Controller
 
 	 	app('store.cart')->update($request->get('product'), $request->get('quantity')); 
 
-	 	return redirect()->route('store.cart');
+	 	return $this->response($request);
+	}
+
+	public function response(Request $request)
+	{
+		return response()->json([ 
+			'items' => app('store.cart')->all() 
+		]); 
 	}
 }

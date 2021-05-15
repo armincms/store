@@ -20,11 +20,8 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->configureWebComponents(); 
         $this->registerPolicies(); 
-        $this->registerCart(); 
-
-        $this->app->booted(function() {
-            $this->routes();
-        });
+        $this->registerCart();  
+        $this->routes(); 
 
         $this->app->resolving('conversion', function($manager) {
             $manager->extend('logo', function() {
@@ -58,6 +55,7 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
             $store->pushComponent(new Components\Cart); 
             $store->pushComponent(new Components\Product); 
             $store->pushComponent(new Components\Category); 
+            $store->pushComponent(new Components\Checkout); 
         });
     }
 
@@ -90,10 +88,10 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
             return;
         }
 
-        \Route::prefix('store/cart')
+        \Route::prefix('api/cart')
             ->middleware(['web'])
             ->namespace('Armincms\Store\Http\Controllers')
-            ->name('store.cart.')
+            ->name('cart.api')
             ->group(__DIR__.'/../routes/web.php'); 
 
         app('routes')->refreshNameLookups();
