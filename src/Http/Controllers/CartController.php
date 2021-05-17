@@ -37,7 +37,7 @@ class CartController extends Controller
 	 		}],
 	 	]); 
 
-	 	$quantity = $request->get('quantity') ?: \ShoppingCart::count($request->get('product'));
+	 	$quantity = intval($request->get('quantity')) ?: \ShoppingCart::count($request->get('product'));
 
 	 	app('store.cart')->decrement($request->get('product'), $quantity); 
 
