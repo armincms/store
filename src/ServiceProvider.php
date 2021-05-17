@@ -19,7 +19,9 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->configureWebComponents(); 
+        $this->registerResources(); 
         $this->registerPolicies(); 
+        $this->registeLocates();  
         $this->registerCart();  
         $this->routes(); 
 
@@ -31,18 +33,6 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
                 return new Conversions\ProductConversion;
             });
         });
-
-        LaravelNova::resources([
-            Nova\Brand::class,
-            Nova\Carrier::class,
-            Nova\Product::class,
-            Nova\Feature::class,
-            Nova\Category::class,
-            Nova\Attribute::class,
-            Nova\Combination::class,
-            Nova\FeatureValue::class,
-            Nova\AttributeGroup::class,
-        ]);
 
         LaravelNova::script('armincms-store-scrips', __DIR__.'/../dist/js/field.js');
     }
@@ -59,6 +49,21 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
         });
     }
 
+    public function registerResources()
+    { 
+        LaravelNova::resources([
+            Nova\Brand::class,
+            Nova\Carrier::class,
+            Nova\Product::class,
+            Nova\Feature::class,
+            Nova\Category::class,
+            Nova\Attribute::class,
+            Nova\Combination::class,
+            Nova\FeatureValue::class,
+            Nova\AttributeGroup::class,
+        ]);
+    }
+
     public function registerPolicies()
     { 
         Gate::policy(Models\StoreBrand::class, Policies\Policy::class);
@@ -69,6 +74,20 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
         Gate::policy(Models\StoreCombination::class, Policies\Policy::class); 
         Gate::policy(Models\StoreFeatureValue::class, Policies\Policy::class);
         Gate::policy(Models\StoreAttributeGroup::class, Policies\Policy::class);
+    }
+
+    public function registeLocates()
+    {    
+        \Config::set('module.locatables.store', [
+            'title' => 'Store', 
+            'name'  => 'store',
+            'items' => [Locate::class, 'moduleLocales']
+        ]);    
+
+        \Config::set('menu.menuables.store', [
+            'title' => 'Product Category',
+            'callback' => [Locate::class, 'categoryLocates'],
+        ]);   
     }
 
     public function registerCart()
@@ -118,6 +137,7 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
             \Illuminate\Console\Events\ArtisanStarting::class,
             \Laravel\Nova\Events\ServingNova::class,
             \Core\HttpSite\Events\ServingFront::class,
+            \Core\Crud\Events\CoreServing::class,
             'store.cart',
         ];
     }
