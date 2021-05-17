@@ -25,7 +25,7 @@ class Cart
 	 */
 	public function has(int $productId)
 	{
-		return isset($this->items[$productId]);
+		return $this->count($productId) > 0;
 	} 
 
 	/**
