@@ -8,12 +8,13 @@ use Armincms\Categorizable\Concerns\InteractsWithCategories;
 use Armincms\Taggable\Concerns\InteractsWithTags;
 use Core\Crud\Concerns\SearchEngineOptimizeTrait;
 use Core\HttpSite\Concerns\IntractsWithSite; 
+use Armincms\Contracts\HasLayout; 
 use Armincms\Concerns\{HasConfig, InteractsWithLayouts}; 
 use Armincms\Orderable\Contracts\{Orderable, Saleable};
 use Core\HttpSite\Component;  
 
 
-class StoreProduct extends Model implements Categorizable, Orderable, Saleable
+class StoreProduct extends Model implements Categorizable, Orderable, Saleable, HasLayout
 { 	  
 	use SoftDeletes, HasConfig, InteractsWithLayouts, IntractsWithSite, SearchEngineOptimizeTrait, InteractsWithTags;
 
@@ -30,6 +31,15 @@ class StoreProduct extends Model implements Categorizable, Orderable, Saleable
 	protected $translator = 'layeric'; 
 
 	const TRANSLATION_MODEL = StoreProductTranslation::class;
+
+    /**
+     * Get the layouts group name.
+     * 
+     * @return string
+     */
+    public function layoutGroupName() {
+        return 'store.product'; 
+    }
 
 	/**
 	 * Query the realted StoreProduct.
