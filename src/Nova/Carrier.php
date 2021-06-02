@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Fields\{ID, Text, Number, Boolean, Select, BelongsTo}; 
 use Armincms\Fields\{Targomaan, BelongsToMany};
+use Armincms\Location\Nova\City;
 use Armincms\Nova\Fields\Money;
 use Armincms\Store\Helper;
 
@@ -53,12 +54,19 @@ class Carrier extends Resource
                 ->required()
                 ->rules('required'),
 
-            BelongsToMany::make(__('Cost Per Range'), 'ranges', \Armincms\Location\Nova\Zone::class)
+            Select::make(__('Ranges apply the'), 'ranges_apply')
+                ->options(Helper::rangeApproaches())
+                ->displayUsingLabels()
+                ->hideFromIndex()
+                ->required()
+                ->rules('required'),
+
+            BelongsToMany::make(__('Cost Per Range'), 'ranges', City::class)
                 ->hideFromIndex()
                 ->pivots()
                 ->fields(function($request) { 
                     return [
-                        Money::make(__('Carrier Price'), 'price')
+                        Money::make(__('Carrier Cost'), 'cost')
                             ->required()
                             ->rules('required'), 
 
@@ -81,6 +89,19 @@ class Carrier extends Resource
             BelongsTo::make(__('Carrier Tax'), 'tax', \Armincms\Taxation\Nova\Tax::class)
                 ->showCreateRelationButton()
                 ->withoutTrashed()
+                ->nullable(),
+
+            Money::make(__('Carrier Cost'), 'cost')
+                ->required()
+                ->rules('required'), 
+
+            Number::make(__('Minimum'), 'min')
+                ->help(__('The minimum value to apply the carrier cost according to the billing behavior'))
+                ->required()
+                ->rules('required'),
+
+            Number::make(__('Maximum'), 'max')
+                ->help(__('The maximum value to apply the carrier cost according to the billing behavior'))
                 ->nullable(),
 
             Text::make(__('Tracking URL'), 'config->tracking_url')

@@ -60,4 +60,18 @@ class Helper
 			'repaired'  => __('Repaired Product'), 
 		];
 	}
+
+	/**
+	 * Returns array of approaches.
+	 * 
+	 * @return array
+	 */
+	public static function rangeApproaches(): array
+	{
+		return [
+			'exclusion'   => __('Exclusion'),
+			'customize'   => __('Customize'),
+			'limitation'  => __('Limitation'), 
+		];
+	}
 }

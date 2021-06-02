@@ -38,13 +38,13 @@ class StoreCarrier extends Model
 	}
 
 	/**
-	 * Query related LocationZone.
+	 * Query related LocationCity.
 	 * 
 	 * @return \Illuminate\Database\Elqoeunt\Relations\BelongsToMany
 	 */
 	public function ranges()
 	{
-		return $this->belongsToMany(\Armincms\Location\Models\LocationZone::class, 'store_carrier_zone')
-					->withPivot('id', 'min', 'max', 'price');
+		return $this->belongsToMany(\Armincms\Location\Models\LocationCity::class, 'store_carrier_city')
+					->withPivot('id', 'min', 'max', 'cost');
 	}
 }

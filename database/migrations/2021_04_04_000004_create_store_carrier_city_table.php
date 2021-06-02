@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Armincms\Store\Helper;
 
-class CreateStoreCarrierZoneTable extends Migration
+class CreateStoreCarrierCityTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,16 +14,19 @@ class CreateStoreCarrierZoneTable extends Migration
      */
     public function up()
     {
-        Schema::create('store_carrier_zone', function (Blueprint $table) {
+        // Down last implementation
+        Schema::dropIfExists('store_carrier_zone');
+
+        Schema::create('store_carrier_city', function (Blueprint $table) {
             $table->bigIncrements('id');     
             $table->unsignedBigInteger('store_carrier_id')->nullable(); 
-            $table->unsignedBigInteger('location_zone_id')->nullable(); 
+            $table->unsignedBigInteger('location_city_id')->nullable(); 
             $table->integer('min')->nullable();
             $table->integer('max')->nullable();
-            $table->price();
+            $table->price('cost');
 
             $table->foreign('store_carrier_id')->references('id')->on('store_carriers');
-            $table->foreign('location_zone_id')->references('id')->on('location_zones');
+            $table->foreign('location_city_id')->references('id')->on('location_cities');
         });
     }
 
@@ -34,6 +37,6 @@ class CreateStoreCarrierZoneTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('store_carrier_zone');
+        Schema::dropIfExists('store_carrier_city');
     }
 }
