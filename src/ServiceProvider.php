@@ -45,7 +45,13 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
             $store->pushComponent(new Components\Cart); 
             $store->pushComponent(new Components\Product); 
             $store->pushComponent(new Components\Category); 
+            $store->pushComponent(new Components\Shipping); 
             $store->pushComponent(new Components\Checkout); 
+            $store->pushComponent(new Components\Invoice); 
+        });
+
+        \Site::push('profile', function($store) {
+            $store->pushComponent(new Components\Address);    
         });
     }
 
@@ -107,10 +113,8 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
             return;
         }
 
-        \Route::prefix('api/cart')
-            ->middleware(['web'])
+        \Route::middleware(['web'])
             ->namespace('Armincms\Store\Http\Controllers')
-            ->name('cart.api')
             ->group(__DIR__.'/../routes/web.php'); 
 
         app('routes')->refreshNameLookups();

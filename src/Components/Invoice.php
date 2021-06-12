@@ -7,7 +7,7 @@ use Core\HttpSite\Concerns\IntractsWithLayout;
 use Core\Document\Document;
 use Armincms\Store\Models\StoreOrder;
 
-class Checkout extends Cart 
+class Invoice extends Cart 
 {       
 	use IntractsWithLayout;
 
@@ -16,15 +16,15 @@ class Checkout extends Cart
 	 * 
 	 * @var null
 	 */
-	protected $route = 'shopping-checkout/{order}'; 
+	protected $route = 'invoice/{token}'; 
 
 	public function toHtml(Request $request, Document $docuemnt) : string
-	{            
-		if (! \Auth::guard('web')->check()) { 
-			throw new AuthenticationException('Unauthenticated.', ['web'], route('login-register.login')); 
-		} 
+	{        
+		$order = StoreOrder::viaToken($request->token)/*->onHold()*/->firstOrFail()->asPaid();   
 		
-		return (string) $this->firstLayout($docuemnt, $this->config('layout', 'clean-store-checkout'))->display(); 
+		return strval(
+			$this->firstLayout($docuemnt, $this->config('layout', 'clean-invoice'))->display()
+		);  
 	}  
 
 	public function saleables()
@@ -35,7 +35,9 @@ class Checkout extends Cart
 	public function order()
 	{
 		if (! isset($order)) {
-			$this->order = StoreOrder::viaCode(request()->route('order'))->with('saleables.product')->firstOrFail();
+			$this->order = StoreOrder::viaToken(request()->route('token'))->with([
+				'saleables.product', 'transactions'
+			])->firstOrFail();
 		}
 
 		return $this->order; 

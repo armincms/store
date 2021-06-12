@@ -18,7 +18,7 @@ class Cart extends Component
 	 */
 	protected $route = 'shopping-cart';
 
-	private $type = null;
+	private $cachedProducts;
 
 	public function toHtml(Request $request, Document $docuemnt) : string
 	{        
@@ -27,6 +27,10 @@ class Cart extends Component
 
 	public function products()
 	{
-		return StoreProduct::find(array_keys(\ShoppingCart::all()));
+		if (! isset($this->cachedProducts)) {
+			$this->cachedProducts = StoreProduct::find(array_keys(\ShoppingCart::all()));
+		}
+
+		return $this->cachedProducts; 
 	}   
 }

@@ -10,13 +10,13 @@ use Core\Crud\Concerns\SearchEngineOptimizeTrait;
 use Core\HttpSite\Concerns\IntractsWithSite; 
 use Armincms\Contracts\HasLayout; 
 use Armincms\Concerns\{HasConfig, InteractsWithLayouts}; 
-use Armincms\Orderable\Contracts\{Orderable, Saleable};
 use Core\HttpSite\Component;  
 
 
-class StoreProduct extends Model implements Categorizable, Orderable, Saleable, HasLayout
+class StoreProduct extends Model implements Categorizable, HasLayout
 { 	  
-	use SoftDeletes, HasConfig, InteractsWithLayouts, IntractsWithSite, SearchEngineOptimizeTrait, InteractsWithTags;
+	use HasConfig, InteractsWithLayouts, InteractsWithTags, IntractsWithSite;
+	use SearchEngineOptimizeTrait, SoftDeletes;
 
 	protected $medias = [
         'gallery' => [  

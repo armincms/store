@@ -47,4 +47,14 @@ class StoreCarrier extends Model
 		return $this->belongsToMany(\Armincms\Location\Models\LocationCity::class, 'store_carrier_city')
 					->withPivot('id', 'min', 'max', 'cost');
 	}
+
+	/**
+	 * Get the shippping cost.
+	 * 
+	 * @return float
+	 */
+	public function shippingCost(): float
+	{
+		return $this->free_shipping ? 0 : floatval($this->cost);
+	}
 }
