@@ -15,6 +15,7 @@
         "armincms/categorizable": "~1.2",
         "armincms/dashboard": "*",
         "armincms/taxation": "*",
+        "darryldecode/cart": "~4.2",
         "davidpiesse/nova-toggle": "~0.0",
         "epartment/nova-dependency-container": "~1.3",
         "whitecube/nova-flexible-content": "~0.1",

@@ -9,6 +9,15 @@ class StoreAddress extends Model
 { 	  
 	use Authorization;
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+    	'fullname'
+    ];
+
 	/**
 	 * Query the realted product.
 	 * 
@@ -50,7 +59,12 @@ class StoreAddress extends Model
 				$this->zipcode;
 	} 
 
-	public function fullname()
+	/**
+	 * Get the user receiver fullname.
+	 *  
+	 * @return string
+	 */
+	public function getFullnameAttribute()
 	{
 		return $this->user->fullname();
 	} 

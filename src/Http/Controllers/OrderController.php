@@ -5,7 +5,7 @@ namespace Armincms\Store\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller; 
 use Armincms\Store\Models\{StoreProduct, StoreAddress, StoreCarrier, StoreOrder}; 
-use ShoppingCart;
+use Cart;
  
 class OrderController extends Controller
 {
@@ -35,12 +35,12 @@ class OrderController extends Controller
 					'finish_callback' => route('store.invoice', $order->token),
 				])->asPending();
 
-				$products = StoreProduct::find(array_keys(ShoppingCart::all()));
+				$products = StoreProduct::find(array_keys(Cart::getContent()->pluck('id')->all()));
 
 				$order->products()->sync($products->keyBy->getKey()->map(function($product) {
 					return [
 						'name' 	=> $product->name,
-						'count' => ShoppingCart::count($product->getKey()),
+						'count' => Cart::count($product->getKey()),
 						'old_price'		=> $product->oldPrice(),
 						'sale_price'	=> $product->salePrice(),
 						'product_id' 	=> $product->getKey(),
@@ -48,7 +48,7 @@ class OrderController extends Controller
 					];
 				})->all());
 
-				ShoppingCart::delete();
+				Cart::clear();
 			}); 
 		});
 

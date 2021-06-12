@@ -28,7 +28,7 @@ class Cart extends Component
 	public function products()
 	{
 		if (! isset($this->cachedProducts)) {
-			$this->cachedProducts = StoreProduct::find(array_keys(\ShoppingCart::all()));
+			$this->cachedProducts = StoreProduct::find(array_keys(\Cart::getContent()->pluck('id')->all()));
 		}
 
 		return $this->cachedProducts; 

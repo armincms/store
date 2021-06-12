@@ -21,8 +21,7 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
         $this->configureWebComponents(); 
         $this->registerResources(); 
         $this->registerPolicies(); 
-        $this->registeLocates();  
-        $this->registerCart();  
+        $this->registeLocates();   
         $this->routes(); 
 
         $this->app->resolving('conversion', function($manager) {
@@ -94,18 +93,7 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
             'title' => 'Product Category',
             'callback' => [Locate::class, 'categoryLocates'],
         ]);   
-    }
-
-    public function registerCart()
-    {
-        $this->app->bind('store.cart', function() {
-            return new Cart;
-        });
-
-        \Helper::registerAlias([
-            'ShoppingCart' => Facades\ShoppingCart::class, 
-        ]); 
-    }
+    } 
 
     public function routes()
     {

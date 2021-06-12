@@ -5,6 +5,7 @@ namespace Armincms\Store\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Armincms\Store\Models\StoreProduct; 
+use Cart;
 
 /**
  * 
@@ -14,15 +15,23 @@ class CartController extends Controller
 	public function push(Request $request)
 	{
 	 	$request->validate([
-	 		'quantity' => 'numeric',
-	 		'product' => ['required', function($attribute, $value, $fail) {
-	 			return StoreProduct::active()->whereKey($value)->firstOr(function() use ($fail) {
-	 				return $fail(__('Requested Product Not Found.'));
-	 			});
-	 		}],
+	 		'quantity' => 'numeric', 
 	 	]); 
 
-	 	app('store.cart')->add($request->get('product'), $request->get('quantity'));  
+	 	$product = StoreProduct::active()->findOrFail($request->get('product'));
+
+	 	Cart::add([
+		    'id' => $product->id, // inique row ID
+		    'name' => $product->name, // inique row ID
+		    'price' => $product->salePrice(), // inique row ID 
+		    'quantity' => $request->get('quantity'), 
+		    'attributes' => [
+		    	'oldPrice' 	=> $product->oldPrice(),
+		    	'image' 	=> $product->featuredImage(),
+		    	'url' 		=> $product->url(),
+		    ],
+		    'associatedModel' => StoreProduct::class,
+		]);
 
 	 	return $this->response($request);
 	}
@@ -31,15 +40,20 @@ class CartController extends Controller
 	{
 	 	$request->validate([
 	 		'product' => ['required', function($attribute, $value, $fail) {
-	 			return StoreProduct::active()->whereKey($value)->firstOr(function() use ($fail) {
-	 				return $fail(__('Requested Product Not Found.'));
-	 			});
+	 			Cart::has($value) || $fail(__('Requested Product Not Found.'));
 	 		}],
 	 	]); 
 
-	 	$quantity = intval($request->get('quantity')) ?: \ShoppingCart::count($request->get('product'));
+	 	$item = Cart::get($request->get('product'));
+	 	$quantity = intval($request->get('quantity')) ?: $item->quantity;
 
-	 	app('store.cart')->decrement($request->get('product'), $quantity); 
+	 	if ($item->quantity > $quantity) {
+	 		Cart::update($request->get('product'), [
+	 			$item->quantity - $request->get('quantity')
+	 		]);
+	 	} else {
+	 		Cart::remove($request->get('product'));
+	 	} 
 
 	 	return $this->response($request); 
 	}
@@ -49,13 +63,13 @@ class CartController extends Controller
 	 	$request->validate([
 	 		'quantity' => 'required|min:1',
 	 		'product' => ['required', function($attribute, $value, $fail) {
-	 			return StoreProduct::active()->whereKey($value)->firstOr(function() use ($fail) {
-	 				return $fail(__('Requested Product Not Found.'));
-	 			});
+	 			Cart::has($value) || $fail(__('Requested Product Not Found.'));
 	 		}],
 	 	]); 
 
-	 	app('store.cart')->update($request->get('product'), $request->get('quantity')); 
+	 	Cart::update($request->get('product'), [
+	 		'quantity' => $request->get('quantity'),
+	 	]); 
 
 	 	return $this->response($request);
 	}
@@ -63,7 +77,7 @@ class CartController extends Controller
 	public function response(Request $request)
 	{
 		return response()->json([ 
-			'items' => app('store.cart')->all() 
+			'items' => Cart::getContent() 
 		]); 
 	}
 }
