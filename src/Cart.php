@@ -155,6 +155,8 @@ class Cart
 	{
 		$this->items = [];
 
+		session()->forget(static::storeKey());
+
 		return $this;
 	}
 
