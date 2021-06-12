@@ -13,6 +13,7 @@
         "armincms/armincms": "~0.10",
         "armincms/arminpay": "~2.0",
         "armincms/categorizable": "~1.2",
+        "armincms/dashboard": "*",
         "armincms/taxation": "*",
         "davidpiesse/nova-toggle": "~0.0",
         "epartment/nova-dependency-container": "~1.3",
