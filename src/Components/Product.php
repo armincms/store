@@ -28,7 +28,7 @@ class Product extends Component implements Resourceable
 	{       
 		$product = StoreProduct::active()->whereHas('translations', function($query) use ($request) {
 			$query->whereUrl($request->relativeUrl());
-		})->firstOrFail()->load('values.feature', 'categories', 'tags'); 
+		})->firstOrFail()->load('values.feature', 'categories', 'tags', 'combinations.attributes.group'); 
 		
 		$this->resource($product);   
 		$docuemnt->title($product->metaTitle()?: $product->title); 

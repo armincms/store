@@ -83,4 +83,44 @@ class StoreCombination extends Model
 	{
 		$this->attributes['weight'] = intval($weight);
 	} 
+
+	/**
+	 * Determine if the value of the default attribute is equal to true.
+	 * 
+	 * @return boolean
+	 */
+	public function isDefault(): bool
+	{
+		return boolval($this->default);
+	}
+
+	/**
+	 * Get the sale price of the item.
+	 * 
+	 * @return decimal
+	 */
+	public function salePrice(): float
+	{
+		return $this->price + $this->product->salePrice();
+	}
+
+	/**
+	 * Get the real price of the item.
+	 * 
+	 * @return decimal
+	 */
+	public function oldPrice(): float
+	{ 
+		return $this->price + $this->product->oldPrice();
+	}
+
+	/**
+	 * The cart storage key.
+	 * 
+	 * @return string
+	 */
+	public function storageKey()
+	{
+		return md5($this->product->storageKey() . "combination:{$this->getKey()}");
+	}
 }

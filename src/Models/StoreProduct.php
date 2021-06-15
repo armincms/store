@@ -322,6 +322,15 @@ class StoreProduct extends Model implements Categorizable, HasLayout
 		return $this->summary;
 	}
 
+	/**
+	 * The cart storage key.
+	 * 
+	 * @return string
+	 */
+	public function storageKey()
+	{
+		return md5("product:{$this->getKey()}");
+	}
 
     /**
      * Convert the model instance to an array.
