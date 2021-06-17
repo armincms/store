@@ -16,21 +16,10 @@ class Cart extends Component
 	 * 
 	 * @var null
 	 */
-	protected $route = 'shopping-cart';
-
-	private $cachedProducts;
+	protected $route = 'shopping-cart'; 
 
 	public function toHtml(Request $request, Document $docuemnt) : string
 	{        
 		return (string) $this->firstLayout($docuemnt, $this->config('layout'), 'clean-cart')->display(); 
-	}  
-
-	public function products()
-	{
-		if (! isset($this->cachedProducts)) {
-			$this->cachedProducts = StoreProduct::find(array_keys(\Cart::getContent()->pluck('id')->all()));
-		}
-
-		return $this->cachedProducts; 
 	}   
 }

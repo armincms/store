@@ -6,7 +6,7 @@ use Illuminate\Auth\AuthenticationException;
 use Core\Document\Document;
 use Core\HttpSite\Component;
 use Core\HttpSite\Concerns\IntractsWithLayout;
-use Armincms\Store\Models\{StoreCarrier, StoreAddress};
+use Armincms\Store\Models\{StoreProduct, StoreCarrier, StoreAddress};
 
 class Shipping extends Cart 
 {       
@@ -26,7 +26,7 @@ class Shipping extends Cart
 		}
 
 
-		return with($this->firstLayout($docuemnt, $this->config('layout'), 'clean-shipping'), function($layout) {
+		return with($this->firstLayout($docuemnt, $this->config('layout', 'clean-shipping')), function($layout) {
 				return (string) $layout->display();
 		});		
 	} 
@@ -43,5 +43,10 @@ class Shipping extends Cart
 		return StoreCarrier::with('ranges')->when($carriers->isNotEmpty(), function($query) use ($carriers) {
 			$query->whereKey($carriers->all());
 		})->get();
+	}
+
+	public function products()
+	{
+		return StoreProduct::find(Cart::getContent()->pluck('attributes.product'));
 	}
 }
