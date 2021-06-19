@@ -35,18 +35,25 @@ class OrderController extends Controller
 					'finish_callback' => route('store.invoice', $order->token),
 				])->asPending();
 
-				$products = StoreProduct::find(array_keys(Cart::getContent()->pluck('id')->all()));
+				$order->products()->sync([]);
 
-				$order->products()->sync($products->keyBy->getKey()->map(function($product) {
-					return [
-						'name' 	=> $product->name,
-						'count' => Cart::count($product->getKey()),
-						'old_price'		=> $product->oldPrice(),
-						'sale_price'	=> $product->salePrice(),
-						'product_id' 	=> $product->getKey(),
-						'description' 	=> $product->summary,
-					];
-				})->all());
+				Cart::getContent()->each(function($item) use ($order) {
+					if ($product = StoreProduct::find($item->attributes->get('product'))) {
+						$product->load('combinations.attributes.group');
+						$combination = $product->combinations->find($item->attributes->get(
+							'combination', $item->id
+						));
+	  
+						$order->products()->attach($product, [ 
+							'count' => $item->quantity,
+							'old_price'		=> $product->oldPrice(),
+							'sale_price'	=> $product->salePrice(),
+							'product_id' 	=> $product->getKey(),
+							'description' 	=> $product->summary,
+							'name' 	=> optional($combination)->fullname() ?: $product->name,
+						]); 
+					}
+				}); 
 
 				Cart::clear();
 			}); 

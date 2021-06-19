@@ -95,6 +95,30 @@ class StoreCombination extends Model
 	}
 
 	/**
+	 * Get the sub name of the item.
+	 * 
+	 * @return decimal
+	 */
+	public function name()
+	{
+		if ($attributes = $this->getRelationValue('attributes')) {
+			return $attributes->pluck('value', 'group.name')->map(function($value, $name) {
+				return "{$name}: {$value}";
+			})->implode(' - ');
+		} 
+	}
+
+	/**
+	 * Get the fullname of the item.
+	 * 
+	 * @return decimal
+	 */
+	public function fullname()
+	{
+		return $this->product->name .' - '. $this->name();
+	}
+
+	/**
 	 * Get the sale price of the item.
 	 * 
 	 * @return decimal
