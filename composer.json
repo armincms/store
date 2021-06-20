@@ -12,7 +12,7 @@
         "armincms/many-to-many": "~0.2", 
         "armincms/armincms": "~0.10",
         "armincms/arminpay": "~2.0",
-        "armincms/categorizable": "~1.2",
+        "armincms/categorizable": "~1.4",
         "armincms/dashboard": "*",
         "armincms/taxation": "*",
         "darryldecode/cart": "~4.2",
