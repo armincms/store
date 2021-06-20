@@ -24,7 +24,9 @@ class Locate
                         ];
                     })->toArray(),
                 ];
-            })->push([
+            })
+            ->push(static::serializeCategoryIndex())
+            ->push([
                 'title' => __('Product Category'),
                 'name'  => 'product-category',
                 'id'    => '*',
@@ -63,6 +65,7 @@ class Locate
                     ->get()
                     ->mapInto(Nova\Category::class)
                     ->map([static::class, 'menuInfotmation'])
+                    ->prepend(static::serializeCategoryIndex())
                     ->toArray();
     } 
 
@@ -78,5 +81,15 @@ class Locate
             ])->toArray()
         ];
 
+    }
+
+    public static function serializeCategoryIndex()
+    {
+        return [
+            'id' => 'index',
+            'title' => __('Category Index'),
+            'active' => 1,
+            'url' => \Site::findByComponent(new Components\CategoryIndex)->url(''),
+        ];
     }
 }
