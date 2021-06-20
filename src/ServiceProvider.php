@@ -47,6 +47,7 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
             $store->pushComponent(new Components\Shipping); 
             $store->pushComponent(new Components\Checkout); 
             $store->pushComponent(new Components\Invoice); 
+            $store->pushComponent(new Components\CategoryIndex); 
         });
 
         \Site::push('profile', function($store) {
