@@ -39,8 +39,14 @@ class Combination implements ResolverInterface
      */
     public function set($model, $attribute, $groups)
     { 
-        $model::saved(function ($model) use ($groups) { 
-            $groups->map->getAttributes()->filter(function($attributes) { 
+        $model::saved(function ($model) use ($groups) {
+            $model->combinations()->get()->each->delete();
+
+            $groups->map->getAttributes()->map(function($layout) {
+                return tap($layout, function(&$layout) {
+                    $layout['attributes'] = json_decode($layout['attributes'] ?? '[]', true);
+                }); 
+            })->filter(function($attributes) { 
                 return isset($attributes['attributes']) && ! empty($attributes['attributes']);
             })->sortBy(function($attributes) {
                 // when updating attributes we make uniquify with the attributes relationship
@@ -52,11 +58,7 @@ class Combination implements ResolverInterface
                 }, count($attributes['attributes'] ?? []))->updateOrCreate([], $attributes);
 
                 $combination->attributes()->sync($attributes['attributes'] ?? []); 
-            }); 
-
-            $model->combinations()->whereDoesntHave('attributes', function($query) use ($groups) {
-                $query->whereKey($groups->map->getAttributes()->flatMap->attributes->all());
-            })->delete(); 
+            });   
         });
         
     }

@@ -16,6 +16,7 @@ use Davidpiesse\NovaToggle\Toggle;
 use Armincms\Taxation\Nova\Rule;
 use Armincms\Store\Helper;
 use Inspheric\Fields\Url;
+use PhoenixLib\NovaNestedTreeAttachMany\NestedTreeAttachManyField;
 
 class Product extends Resource
 {
@@ -183,11 +184,19 @@ class Product extends Resource
                 FlexibleField::make(__('Product Combinations'), 'combinations')
                     ->resolver(Flexible\Resolvers\Combination::class)
                     ->addLayout(__('Combination'), 'combination', array_merge([ 
-                        Multiselect::make(__('Attributes'), 'attributes')
-                            ->belongsToMany(Attribute::class)
+                        NestedTreeAttachManyField::make(__('Attributes'), 'attributes', AttributeGroup::class) 
+                            ->withLabelKey('name')
+                            ->withAlwaysOpen(false)
+                            ->withPlaceholder(__('Choose an attribute'))
                             ->fillUsing(function($request, $model, $requestAttribute, $attribute) {
                                 $model->{$attribute} = $request->get($attribute);
-                            }),
+                            })
+                            ->resolveUsing(function() {
+                                
+                            })
+                            ->withMeta([
+                                'options' => AttributeGroup::newModel()->with('children')->get()
+                            ]),
 
                     ], Fields\Combination::fields($request)))
                     ->collapsed() 

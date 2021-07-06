@@ -14,6 +14,20 @@ class StoreCombination extends Model
     	'price', 'width', 'height', 'weight', 'default', 'quantity'
     ];
 
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+    	parent::boot();
+
+    	static::deleting(function($model) {
+    		$model->attributes()->sync([]);
+    	});
+    }
+
 	/**
 	 * Query the related StoreCombinationValue.
 	 * 

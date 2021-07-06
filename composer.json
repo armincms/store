@@ -8,6 +8,7 @@
     "license": "MIT",
     "require": {
         "php": ">=7.1.0",
+        "phoenix-lib/nova-nested-tree-attach-many": "~1.0",
         "armincms/currency": "~0.2",
         "armincms/many-to-many": "~0.2", 
         "armincms/armincms": "~0.10",

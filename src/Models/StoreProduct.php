@@ -346,4 +346,37 @@ class StoreProduct extends Model implements Categorizable, HasLayout
     		'gallery' => $this->galleryImages(),
     	]);
     }
+
+    /**
+     * Get an attribute from the model.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function getAttribute($key)
+    {
+    	if (preg_match('/([0-9]+)__attribute/', $key, $matches)) {
+    		$this->loadMissing('combinations.attributes');
+
+    		return $this->combinations->find($matches[1])->getRelationValue('attributes');
+    	}
+
+    	return parent::getAttribute($key);
+    }
+
+    /**
+     * Handle dynamic method calls into the model.
+     *
+     * @param  string  $method
+     * @param  array  $parameters
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+    	if (preg_match('/([0-9]+)__attribute/', $method, $matches)) {
+    		return $this->combinations()->findOrFail($matches[1])->attributes(); 
+    	}
+
+    	return parent::__call($method, $parameters);
+    }
 }
