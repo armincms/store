@@ -44,7 +44,7 @@ export default {
 
   watch: {
     selectedValues: function(current, before) {
-      let newItem = current.find(value => ! before.includes(value)) 
+      let newItem = current.find(value => before && ! before.includes(value)) 
       let group = this.field.options.find(group => {
         return group.children.find(option => option.id == newItem)
       }) 
