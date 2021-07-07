@@ -2,12 +2,11 @@
 
 namespace Armincms\Store;
 
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Contracts\Support\DeferrableProvider;
+use Illuminate\Support\Facades\Gate; 
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider; 
 use Laravel\Nova\Nova as LaravelNova; 
 
-class ServiceProvider extends LaravelServiceProvider implements DeferrableProvider
+class ServiceProvider extends LaravelServiceProvider 
 { 
 
     /**
@@ -15,11 +14,10 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
      *
      * @return void
      */
-    public function register()
+    public function boot()
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->configureWebComponents(); 
-        $this->registerResources(); 
         $this->registerPolicies(); 
         $this->registeLocates();   
         $this->routes(); 
@@ -33,7 +31,12 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
             });
         });
 
-        LaravelNova::script('armincms-store-scrips', __DIR__.'/../dist/js/field.js');
+        LaravelNova::serving(function() {
+            LaravelNova::script('armincms-store-scrips', __DIR__.'/../dist/js/field.js'); 
+            LaravelNova::script('nova-nested-tree-attach-many', __DIR__.'/../dist/js/tree.js');
+
+            $this->registerResources(); 
+        });
     }
 
     public function configureWebComponents()
@@ -107,31 +110,5 @@ class ServiceProvider extends LaravelServiceProvider implements DeferrableProvid
             ->group(__DIR__.'/../routes/web.php'); 
 
         app('routes')->refreshNameLookups();
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return [];
-    }
-
-    /**
-     * Get the events that trigger this service provider to register.
-     *
-     * @return array
-     */
-    public function when()
-    {
-        return [
-            \Illuminate\Console\Events\ArtisanStarting::class,
-            \Laravel\Nova\Events\ServingNova::class,
-            \Core\HttpSite\Events\ServingFront::class,
-            \Core\Crud\Events\CoreServing::class,
-            'store.cart',
-        ];
-    }
+    } 
 }
