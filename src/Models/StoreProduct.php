@@ -361,6 +361,10 @@ class StoreProduct extends Model implements Categorizable, HasLayout
     		return $this->combinations->find($matches[1])->getRelationValue('attributes');
     	}
 
+    	if (preg_match('/.*__attribute/', $key, $matches)) {
+    		return collect();
+    	}
+
     	return parent::getAttribute($key);
     }
 
@@ -375,6 +379,10 @@ class StoreProduct extends Model implements Categorizable, HasLayout
     {
     	if (preg_match('/([0-9]+)__attribute/', $method, $matches)) {
     		return $this->combinations()->findOrFail($matches[1])->attributes(); 
+    	}
+
+    	if (preg_match('/.*__attribute/', $method, $matches)) {
+    		return $this->combinations(); 
     	}
 
     	return parent::__call($method, $parameters);
