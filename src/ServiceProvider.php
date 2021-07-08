@@ -31,11 +31,13 @@ class ServiceProvider extends LaravelServiceProvider
             });
         });
 
-        LaravelNova::serving(function() {
-            LaravelNova::script('armincms-store-scrips', __DIR__.'/../dist/js/field.js'); 
-            LaravelNova::script('nova-nested-tree-attach-many', __DIR__.'/../dist/js/tree.js');
+        $this->app->booted(function() { 
+            LaravelNova::serving(function() {
+                LaravelNova::script('armincms-store-scrips', __DIR__.'/../dist/js/field.js'); 
+                LaravelNova::script('nova-nested-tree-attach-many', __DIR__.'/../dist/js/tree.js');
 
-            $this->registerResources(); 
+                $this->registerResources(); 
+            }); 
         });
     }
 
