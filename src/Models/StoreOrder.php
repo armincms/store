@@ -12,7 +12,17 @@ use Armincms\Concerns\Authorization;
 class StoreOrder extends Model implements Billable, Trackable 
 { 	  
 	use InteractsWithTransactions, HasTrackingCode, Authorization, SoftDeletes;
-    use Markable, HasDraft, HasPending, HasCompletion, HasPayment, HasOnHold;
+    use Carryable, HasDelivery, HasDraft, HasPending, HasCompletion, HasPayment, HasOnHold, Markable;
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+    	'created_at' => 'datetime',
+    	'total' => 'float',
+    ];
 
     public static function boot()
     {

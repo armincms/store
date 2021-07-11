@@ -62,15 +62,17 @@ class ServiceProvider extends LaravelServiceProvider
     public function registerResources()
     { 
         LaravelNova::resources([
+            Nova\Attribute::class,
+            Nova\AttributeGroup::class,
             Nova\Brand::class,
             Nova\Carrier::class,
-            Nova\Product::class,
-            Nova\Feature::class,
             Nova\Category::class,
-            Nova\Attribute::class,
             Nova\Combination::class,
+            Nova\Feature::class,
             Nova\FeatureValue::class,
-            Nova\AttributeGroup::class,
+            Nova\Order::class,
+            Nova\OrderItem::class,
+            Nova\Product::class,
         ]);
     }
 
