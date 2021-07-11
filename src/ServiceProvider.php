@@ -18,6 +18,7 @@ class ServiceProvider extends LaravelServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->configureWebComponents(); 
+        $this->registerResources();
         $this->registerPolicies(); 
         $this->registeLocates();   
         $this->routes(); 
@@ -31,13 +32,11 @@ class ServiceProvider extends LaravelServiceProvider
             });
         });
 
-        $this->app->booted(function() { 
+        $this->app->booted(function($app) { 
             LaravelNova::serving(function() {
                 LaravelNova::script('armincms-store-scrips', __DIR__.'/../dist/js/field.js'); 
-                LaravelNova::script('nova-nested-tree-attach-many', __DIR__.'/../dist/js/tree.js');
-
-                $this->registerResources(); 
-            }); 
+                LaravelNova::script('nova-nested-tree-attach-many', __DIR__.'/../dist/js/tree.js'); 
+            });  
         });
     }
 
