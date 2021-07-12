@@ -35,18 +35,7 @@ class StoreCarrier extends Model
 	public function tax()
 	{
 		return $this->belongsTo(\Armincms\Taxation\Models\TaxationTax::class);
-	}
-
-	/**
-	 * Query related LocationCity.
-	 * 
-	 * @return \Illuminate\Database\Elqoeunt\Relations\BelongsToMany
-	 */
-	public function ranges()
-	{
-		return $this->belongsToMany(\Armincms\Location\Models\LocationCity::class, 'store_carrier_city')
-					->withPivot('id', 'min', 'max', 'cost');
-	}
+	} 
 
 	/**
 	 * Get the shippping cost.
@@ -57,4 +46,52 @@ class StoreCarrier extends Model
 	{
 		return $this->free_shipping ? 0 : floatval($this->cost);
 	}
+
+    /**
+     * Get all of the countries that are assigned this carrier.
+     */
+    public function countries()
+    {
+        return $this->morphedByMany(
+        	\Armincms\Location\Models\LocationCountry::class, 
+        	'location', 
+        	'store_carrier_range'
+        )->withPivot('min', 'max', 'cost');
+    }
+
+    /**
+     * Get all of the states that are assigned this carrier.
+     */
+    public function states()
+    {
+        return $this->morphedByMany(
+        	\Armincms\Location\Models\LocationState::class, 
+        	'location', 
+        	'store_carrier_range'
+        )->withPivot('min', 'max', 'cost');
+    }
+
+    /**
+     * Get all of the cities that are assigned this carrier.
+     */
+    public function cities()
+    {
+        return $this->morphedByMany(
+        	\Armincms\Location\Models\LocationCity::class, 
+        	'location', 
+        	'store_carrier_range'
+        )->withPivot('min', 'max', 'cost');
+    }
+
+    /**
+     * Get all of the zones that are assigned this carrier.
+     */
+    public function zones()
+    {
+        return $this->morphedByMany(
+        	\Armincms\Location\Models\LocationZone::class, 
+        	'location', 
+        	'store_carrier_range'
+        )->withPivot('min', 'max', 'cost');
+    }
 }

@@ -2,13 +2,17 @@
 
 namespace Armincms\Store\Nova;
 
+use Armincms\Location\Nova\City;
+use Armincms\Location\Nova\State;
+use Armincms\Location\Nova\Country;
+use Armincms\Location\Nova\Zone;
 use Illuminate\Http\Request; 
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Fields\{ID, Text, Number, Boolean, Select, BelongsTo}; 
 use Armincms\Fields\{Targomaan, BelongsToMany};
-use Armincms\Location\Nova\City;
 use Armincms\Nova\Fields\Money;
 use Armincms\Store\Helper;
+use Whitecube\NovaFlexibleContent\Flexible as FlexibleField;
 
 class Carrier extends Resource
 {
@@ -59,25 +63,7 @@ class Carrier extends Resource
                 ->displayUsingLabels()
                 ->hideFromIndex()
                 ->required()
-                ->rules('required'),
-
-            BelongsToMany::make(__('Cost Per Range'), 'ranges', City::class)
-                ->hideFromIndex()
-                ->pivots()
-                ->fields(function($request) { 
-                    return [
-                        Money::make(__('Carrier Cost'), 'cost')
-                            ->required()
-                            ->rules('required'), 
-
-                        Number::make(__('Minimum'), 'min')
-                            ->required()
-                            ->rules('required'),
-
-                        Number::make(__('Maximum'), 'max')
-                            ->nullable(),
-                    ];
-                }),
+                ->rules('required'), 
 
             Select::make(__('Out-of-range Behavior'), 'config->outof_range')
                 ->options(Helper::outofRangeBehaviors())
@@ -113,7 +99,37 @@ class Carrier extends Resource
             $this->imageField(__('Logo'), 'logo')
                     ->conversionOnPreview('logo-thumbnail') 
                     ->conversionOnDetailView('logo-thumbnail') 
-                    ->conversionOnIndexView('logo-icon'),
+                    ->conversionOnIndexView('logo-icon'),            
+
+            tap(FlexibleField::make(__('Cost Per Range'), 'ranges'), function($flexible) {
+                $flexible
+                    ->button(__('Add New Range'))
+                    ->collapsed()
+                    ->resolver(Flexible\Resolvers\Range::class);
+
+                collect([
+                    Country::class, 
+                    State::class, 
+                    City::class, 
+                    Zone::class
+                ])->each(function($resource) use ($flexible) { 
+                    $flexible->addLayout($resource::label(), $resource::uriKey(), [
+                        Select::make($resource::singularLabeL(), 'location_id')
+                            ->options($resource::newModel()->get()->pluck('name', 'id')),
+
+                        Money::make(__('Carrier Cost'), 'cost')
+                            ->required()
+                            ->rules('required'), 
+
+                        Number::make(__('Minimum'), 'min')
+                            ->required()
+                            ->rules('required'),
+
+                        Number::make(__('Maximum'), 'max')
+                            ->nullable(),
+                    ]);  
+                });
+            }),
         ];
     }
 }
