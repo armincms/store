@@ -14,15 +14,11 @@ class Product extends Component implements Resourceable
 	use IntractsWithResource, IntractsWithLayout;
 
 	/**
-	 * Route Conditions of section
+	 * Route of Component.
 	 * 
 	 * @var null
 	 */
-	protected $wheres = [ 
-		'id'	=> '[0-9]+'
-	];  
-
-	private $type = null;
+	protected $route = 'products/{slug}';   
 
 	public function toHtml(Request $request, Document $docuemnt) : string
 	{       
