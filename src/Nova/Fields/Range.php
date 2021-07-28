@@ -104,7 +104,7 @@ class Range extends Field
             $this->withMeta([
                 'range' => collect($values)->flatten(1)->max(function($values) {
                     return count($values);
-                })
+                }) ?: 1
             ]);
         });
     }
