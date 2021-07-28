@@ -58,12 +58,12 @@ class Carrier extends Resource
                 ->required()
                 ->rules('required'),
 
-            Select::make(__('Ranges apply the'), 'ranges_apply')
-                ->options(Helper::rangeApproaches())
-                ->displayUsingLabels()
-                ->hideFromIndex()
-                ->required()
-                ->rules('required'), 
+            // Select::make(__('Ranges apply the'), 'ranges_apply')
+            //     ->options(Helper::rangeApproaches())
+            //     ->displayUsingLabels()
+            //     ->hideFromIndex()
+            //     ->required()
+            //     ->rules('required'), 
 
             Select::make(__('Out-of-range Behavior'), 'config->outof_range')
                 ->options(Helper::outofRangeBehaviors())
@@ -77,59 +77,61 @@ class Carrier extends Resource
                 ->withoutTrashed()
                 ->nullable(),
 
-            Money::make(__('Carrier Cost'), 'cost')
-                ->required()
-                ->rules('required'), 
+            // Money::make(__('Carrier Cost'), 'cost')
+            //     ->required()
+            //     ->rules('required'), 
 
-            Number::make(__('Minimum'), 'min')
-                ->help(__('The minimum value to apply the carrier cost according to the billing behavior'))
-                ->required()
-                ->rules('required'),
+            // Number::make(__('Minimum'), 'min')
+            //     ->help(__('The minimum value to apply the carrier cost according to the billing behavior'))
+            //     ->required()
+            //     ->rules('required'),
 
-            Number::make(__('Maximum'), 'max')
-                ->help(__('The maximum value to apply the carrier cost according to the billing behavior'))
-                ->nullable(),
+            // Number::make(__('Maximum'), 'max')
+            //     ->help(__('The maximum value to apply the carrier cost according to the billing behavior'))
+            //     ->nullable(),
 
             Text::make(__('Tracking URL'), 'config->tracking_url')
                 ->hideFromIndex()
                 ->nullable(),
 
             Boolean::make(__('Free Shipping'), 'free_shipping'), 
+
+            Fields\Range::make(__('Cost Per Range')),
             
             $this->imageField(__('Logo'), 'logo')
                     ->conversionOnPreview('logo-thumbnail') 
                     ->conversionOnDetailView('logo-thumbnail') 
                     ->conversionOnIndexView('logo-icon'),            
 
-            tap(FlexibleField::make(__('Cost Per Range'), 'ranges'), function($flexible) {
-                $flexible
-                    ->button(__('Add New Range'))
-                    ->collapsed()
-                    ->resolver(Flexible\Resolvers\Range::class);
+            // tap(FlexibleField::make(__('Cost Per Range'), 'ranges'), function($flexible) {
+            //     $flexible
+            //         ->button(__('Add New Range'))
+            //         ->collapsed()
+            //         ->resolver(Flexible\Resolvers\Range::class);
 
-                collect([
-                    Country::class, 
-                    State::class, 
-                    City::class, 
-                    Zone::class
-                ])->each(function($resource) use ($flexible) { 
-                    $flexible->addLayout($resource::label(), $resource::uriKey(), [
-                        Select::make($resource::singularLabeL(), 'location_id')
-                            ->options($resource::newModel()->get()->pluck('name', 'id')),
+            //     collect([
+            //         Country::class, 
+            //         State::class, 
+            //         City::class, 
+            //         Zone::class
+            //     ])->each(function($resource) use ($flexible) { 
+            //         $flexible->addLayout($resource::label(), $resource::uriKey(), [
+            //             Select::make($resource::singularLabeL(), 'location_id')
+            //                 ->options($resource::newModel()->get()->pluck('name', 'id')),
 
-                        Money::make(__('Carrier Cost'), 'cost')
-                            ->required()
-                            ->rules('required'), 
+            //             Money::make(__('Carrier Cost'), 'cost')
+            //                 ->required()
+            //                 ->rules('required'), 
 
-                        Number::make(__('Minimum'), 'min')
-                            ->required()
-                            ->rules('required'),
+            //             Number::make(__('Minimum'), 'min')
+            //                 ->required()
+            //                 ->rules('required'),
 
-                        Number::make(__('Maximum'), 'max')
-                            ->nullable(),
-                    ]);  
-                });
-            }),
+            //             Number::make(__('Maximum'), 'max')
+            //                 ->nullable(),
+            //         ]);  
+            //     });
+            // }),
         ];
     }
 }

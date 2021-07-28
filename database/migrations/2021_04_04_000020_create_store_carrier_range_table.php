@@ -21,9 +21,7 @@ class CreateStoreCarrierRangeTable extends Migration
             $table->bigIncrements('id');     
             $table->unsignedBigInteger('store_carrier_id')->nullable(); 
             $table->morphs('location'); 
-            $table->integer('min')->nullable();
-            $table->integer('max')->nullable();
-            $table->price('cost');
+            $table->json('ranges')->nullable(); 
 
             $table->foreign('store_carrier_id')->references('id')->on('store_carriers'); 
         });

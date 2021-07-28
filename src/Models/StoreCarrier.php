@@ -56,7 +56,7 @@ class StoreCarrier extends Model
         	\Armincms\Location\Models\LocationCountry::class, 
         	'location', 
         	'store_carrier_range'
-        )->withPivot('min', 'max', 'cost');
+        )->withPivot('ranges');
     }
 
     /**
@@ -68,7 +68,7 @@ class StoreCarrier extends Model
         	\Armincms\Location\Models\LocationState::class, 
         	'location', 
         	'store_carrier_range'
-        )->withPivot('min', 'max', 'cost');
+        )->withPivot('ranges');
     }
 
     /**
@@ -80,7 +80,7 @@ class StoreCarrier extends Model
         	\Armincms\Location\Models\LocationCity::class, 
         	'location', 
         	'store_carrier_range'
-        )->withPivot('min', 'max', 'cost');
+        )->withPivot('ranges');
     }
 
     /**
@@ -92,6 +92,6 @@ class StoreCarrier extends Model
         	\Armincms\Location\Models\LocationZone::class, 
         	'location', 
         	'store_carrier_range'
-        )->withPivot('min', 'max', 'cost');
+        )->withPivot('ranges');
     }
 }

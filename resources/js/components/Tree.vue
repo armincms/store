@@ -3,19 +3,19 @@
     <template slot="field">
       <div :dir="field.rtl ? 'rtl' : 'ltr'" class="p-2 nova-tree-attach-many">
         <treeselect v-model="selectedValues"
-            :id="field.name"
-            :multiple="field.multiple"
-            :options="field.options"
-            :flat="field.flatten"
-            :searchable="field.searchable"
-            :always-open="field.alwaysOpen"
-            :disabled="field.disabled"
-            :sort-value-by="field.sortValueBy"
-            :placeholder="field.placeholder"
-            :max-height="field.maxHeight"
-            :value-consists-of="field.valueConsistsOf"
-            :normalizer="normalizer"
-            :disableBranchNodes="true" 
+          :id="field.name"
+          :multiple="field.multiple"
+          :options="field.options"
+          :flat="field.flatten"
+          :searchable="field.searchable"
+          :always-open="field.alwaysOpen"
+          :disabled="field.disabled"
+          :sort-value-by="field.sortValueBy"
+          :placeholder="field.placeholder"
+          :max-height="field.maxHeight"
+          :value-consists-of="field.valueConsistsOf"
+          :normalizer="normalizer"
+          :disableBranchNodes="true" 
         />
       </div>
     </template>
