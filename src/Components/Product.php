@@ -18,7 +18,7 @@ class Product extends Component implements Resourceable
 	 * 
 	 * @var null
 	 */
-	protected $route = 'products/{slug}';   
+	protected $route = 'product/{slug}';   
 
 	public function toHtml(Request $request, Document $docuemnt) : string
 	{       
