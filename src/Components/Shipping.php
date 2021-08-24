@@ -8,7 +8,7 @@ use Core\HttpSite\Component;
 use Core\HttpSite\Concerns\IntractsWithLayout;
 use Armincms\Store\Models\{StoreProduct, StoreCarrier, StoreAddress};
 
-class Shipping extends Cart 
+class Shipping extends Dashboard\Dashboard 
 {       
 	use IntractsWithLayout;
 
@@ -20,15 +20,12 @@ class Shipping extends Cart
 	protected $route = 'shipping'; 
 
 	public function toHtml(Request $request, Document $docuemnt) : string
-	{          
-		if (! \Auth::guard('web')->check()) { 
-			throw new AuthenticationException('Unauthenticated.', ['web'], route('login-register.login')); 
-		}
+	{    
+		$this->checkAuthentication(); 
 
+		$layout = $this->firstLayout($docuemnt, $this->config('layout', 'clean-shipping'));
 
-		return with($this->firstLayout($docuemnt, $this->config('layout', 'clean-shipping')), function($layout) {
-				return (string) $layout->display();
-		});		
+		return strval($layout->display());		
 	} 
 
 	public function addresses()
@@ -37,16 +34,23 @@ class Shipping extends Cart
 	}
 
 	public function carriers()
-	{ 
-		$carriers = $this->products()->flatMap->getConfig('shipping.carriers')->filter();
+	{  
+		return StoreCarrier::with('countries', 'cities', 'states', 'zones')->get();
+	}
 
-		return StoreCarrier::with('ranges')->when($carriers->isNotEmpty(), function($query) use ($carriers) {
-			$query->whereKey($carriers->all());
-		})->get();
+	public function groupedProducts()
+	{ 
+		return $this->products()->groupBy(function($product) {
+	        return collect($product->getConfig('shipping.carriers'))
+	        			->filter()
+	        			->sort()
+	        			->keys()
+	        			->toJson();
+	    });
 	}
 
 	public function products()
-	{
-		return StoreProduct::find(Cart::getContent()->pluck('attributes.product'));
+	{ 
+		return StoreProduct::find(\Cart::getContent()->pluck('attributes.product'));
 	}
 }

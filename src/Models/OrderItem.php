@@ -14,6 +14,15 @@ class OrderItem extends Pivot
      */
     protected $table= 'store_saleables';
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+    	'details' => 'collection',
+    ];
+
 	/**
 	 * Query the realted product.
 	 * 

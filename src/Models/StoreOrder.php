@@ -12,7 +12,7 @@ use Armincms\Concerns\Authorization;
 class StoreOrder extends Model implements Billable, Trackable 
 { 	  
 	use InteractsWithTransactions, HasTrackingCode, Authorization, SoftDeletes;
-    use Carryable, HasDelivery, HasDraft, HasPending, HasCompletion, HasPayment, HasOnHold, Markable;
+    use Carryable, HasDelivery, HasCancelation, HasDraft, HasPending, HasCompletion, HasPayment, HasOnHold, Markable;
 
     /**
      * The attributes that should be cast to native types.
@@ -79,17 +79,7 @@ class StoreOrder extends Model implements Billable, Trackable
 	public function address()
 	{
 		return $this->belongsTo(StoreAddress::class);
-	}  
-
-	/**
-	 * Query the realted StoreCarrier.
-	 * 
-	 * @return \Illuminate\Database\Elqoeunt\Relations\BelongsTo
-	 */
-	public function carrier()
-	{
-		return $this->belongsTo(StoreCarrier::class);
-	}  
+	}   
 
 	/**
 	 * Get total price of the item.
@@ -98,7 +88,17 @@ class StoreOrder extends Model implements Billable, Trackable
 	 */
 	public function totalPrice(): float
 	{
-		return floatval($this->saleables->sum->total() + $this->carrier->cost);
+		return floatval($this->saleables->sum->total() + $this->carrierCost());
+	} 
+
+	/**
+	 * Get total cost of carriers.
+	 * 
+	 * @return float
+	 */
+	public function carrierCost()
+	{
+		return floatval($this->saleables->pluck('details.carrier')->unique('id')->sum('cost'));
 	}
 
 	/**

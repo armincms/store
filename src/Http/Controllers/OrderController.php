@@ -12,21 +12,21 @@ class OrderController extends Controller
 	public function store(Request $request)
 	{
 		$request->validate([ 
-			'carrier' => 'required|numeric',
+			'carrier.*' => 'required|numeric',
 			'address' => 'required|numeric',
-		]);
+		]); 
 
 		$order = \DB::transaction(function() use ($request) { 
 			return tap(new StoreOrder, function($order) use ($request) {
 				$address = StoreAddress::findOrFail($request->address);
-				$carrier = StoreCarrier::findOrFail($request->carrier);
+				// $carrier = StoreCarrier::findOrFail($request->carrier);
 
 				$order->forceFill([
 					'address' => $address->address,
 					'currency_code' => config('nova.currency'),
 				]);
 
-				$order->carrier()->associate($carrier);
+				// $order->carrier()->associate($carrier);
 				$order->user()->associate($request->user());
 
 				$order->save();  
@@ -40,9 +40,10 @@ class OrderController extends Controller
 				Cart::getContent()->each(function($item) use ($order) {
 					if ($product = StoreProduct::find($item->attributes->get('product'))) {
 						$product->load('combinations.attributes.group');
+						$carreir = StoreCarrier::findOrFail(request("carrier.".$product->getKey()));
 						$combination = $product->combinations->find($item->attributes->get(
 							'combination', $item->id
-						));
+						));   
 	  
 						$order->products()->attach($product, [ 
 							'count' => $item->quantity,
@@ -51,9 +52,18 @@ class OrderController extends Controller
 							'product_id' 	=> $product->getKey(),
 							'description' 	=> $product->summary,
 							'name' 	=> optional($combination)->fullname() ?: $product->name,
+							'details' => [
+								'image' => $product->featuredImage(),
+								'carreir' => [
+									'name' => $carreir->name,
+									'id' => $carreir->getKey(),
+									'cost' => $carreir->cost,
+								], 
+								'attributes' => $item->attributes->get('attributes'),
+							],
 						]); 
 					}
-				}); 
+				});  
 
 				Cart::clear();
 			}); 
