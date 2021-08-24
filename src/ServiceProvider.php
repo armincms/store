@@ -45,6 +45,7 @@ class ServiceProvider extends LaravelServiceProvider
     { 
         \Site::push('store', function($store) {
             $store->directory('store');
+            $store->pushMiddleware(Http\Middlewares\Authenticate::class);
   
             $store->pushComponent(new Components\Cart); 
             $store->pushComponent(new Components\Product); 
@@ -53,11 +54,10 @@ class ServiceProvider extends LaravelServiceProvider
             $store->pushComponent(new Components\Checkout); 
             $store->pushComponent(new Components\Invoice); 
             $store->pushComponent(new Components\CategoryIndex); 
-        });
 
-        \Site::push('profile', function($store) {
-            $store->pushComponent(new Components\Address);    
-        });
+            $store->pushComponent(new Components\Dashboard\Dashboard); 
+            $store->pushComponent(new Components\Dashboard\Login); 
+        }); 
     }
 
     public function registerResources()
