@@ -57,6 +57,7 @@ class ServiceProvider extends LaravelServiceProvider
 
             $store->pushComponent(new Components\Dashboard\Dashboard); 
             $store->pushComponent(new Components\Dashboard\Login); 
+            $store->pushComponent(new Components\Dashboard\Register); 
         }); 
     }
 

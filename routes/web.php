@@ -6,6 +6,10 @@ Route::post('store/login', [
     'as'    => 'store.attempt',
 ]);
 
+Route::post('store/register', [
+    'uses'  => Auth\RegisterController::class.'@register', 
+]);
+
 Route::post('store/logout', [
     'uses'  => Auth\LoginController::class.'@logout',
     'as'    => 'store.logout',

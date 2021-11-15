@@ -37,9 +37,11 @@ class Dashboard extends Component
 
 	public function checkAuthentication()
 	{
-		throw_unless(\Auth::guard('web')->check(), AuthenticationException::class, [
-			['web'], route('store.login')
-		]); 
+		if (\Auth::guard('web')->check()) {
+			return;
+		}
+
+		throw new AuthenticationException("Unauthenticated", ['web'], route('store.login')); 
 	}
 
 	public function menus()
