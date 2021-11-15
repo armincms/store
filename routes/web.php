@@ -15,6 +15,10 @@ Route::post('store/logout', [
     'as'    => 'store.logout',
 ]);
 
+Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('store.password.email');
+Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('store.password.update');
+
 Route::post('register-order', 'OrderController@store')->name('store.register-order');
 Route::post('payment/{order}', 'PaymentController@handle')->name('store.payment');
 Route::post('adress', 'AddressController@store')->name('store.address');

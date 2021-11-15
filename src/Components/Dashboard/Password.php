@@ -8,7 +8,7 @@ use Core\HttpSite\Concerns\IntractsWithLayout;
 use Illuminate\Http\Request; 
 use Illuminate\Auth\AuthenticationException;
 
-class Register extends Component 
+class Password extends Component 
 {       
 	use IntractsWithLayout;
 
@@ -17,12 +17,12 @@ class Register extends Component
 	 * 
 	 * @var null
 	 */
-	protected $route = 'register'; 
+	protected $route = 'password-reset'; 
 
 	public function toHtml(Request $request, Document $docuemnt) : string
 	{         
-		$layout = $this->firstLayout($docuemnt, $this->config('layout', 'clean-login'));
+		$layout = $this->firstLayout($docuemnt, $this->config('layout', 'myriad-login'));
 
-		return strval($layout->display(['layout' => 'register']));
+		return strval($layout->display(['layout' => 'password-reset']));
 	}   
 }

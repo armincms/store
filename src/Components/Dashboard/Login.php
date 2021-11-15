@@ -23,6 +23,6 @@ class Login extends Component
 	{         
 		$layout = $this->firstLayout($docuemnt, $this->config('layout', 'clean-login'));
 
-		return strval($layout->display());
+		return strval($layout->display(['layout' => 'login']));
 	}   
 }
