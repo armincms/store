@@ -12,7 +12,9 @@ class AddressController extends Controller
 	{
 		$request->validate([  
 			'name' 	=> 'required|string', 
+			'receiver' 	=> 'required|string', 
 			'city' 	=> 'required|numeric', 
+			'zone' 	=> 'required|numeric', 
 			'address' => 'required|string',
 			'phone' => 'required|numeric',
 			'mobile' => 'required|numeric',
@@ -22,7 +24,9 @@ class AddressController extends Controller
 
 		$address = tap((new StoreAddress)->forceFill([
 			'city_id' => $request->city,
+			'zone_id' => $request->zone,
 			'address' => $request->address,
+			'receiver' => $request->receiver,
 			'name' => $request->name,
 			'phone' => $request->phone,
 			'mobile' => $request->mobile,
