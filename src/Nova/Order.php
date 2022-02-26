@@ -54,6 +54,7 @@ class Order extends Resource
                 'delivered' => 'success',
                 'paid' => 'success',
                 'pending' => 'warning',
+                'onhold' => 'warning',
                 'shipped' => 'info',
             ]),
 
