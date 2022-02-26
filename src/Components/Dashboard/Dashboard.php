@@ -2,6 +2,7 @@
 namespace Armincms\Store\Components\Dashboard;
  
 use Armincms\Store\Models\StoreOrder;
+use Armincms\Store\Models\StoreAddress;
 use Illuminate\Http\Request; 
 use Illuminate\Auth\AuthenticationException;
 use Core\Document\Document;
@@ -20,6 +21,7 @@ class Dashboard extends Component
 	protected $route = 'dashboard/{dashboard?}'; 
 
 	protected $orders;
+	protected $addresses;
 
 	public function toHtml(Request $request, Document $docuemnt) : string
 	{         
@@ -59,6 +61,10 @@ class Dashboard extends Component
 				'uriKey' => 'orders',
 				'label' => __('My Orders'),
 			],
+			[ 
+				'uriKey' => 'address',
+				'label' => __('My Address'),
+			],
 		]);
 	}
 
@@ -69,5 +75,14 @@ class Dashboard extends Component
 		}
 
 		return $this->orders;
+	}
+
+	public function addresses()
+	{
+		if (! isset($this->addresses)) {
+			$this->addresses = StoreAddress::authenticate()->with('city')->latest()->get();
+		}
+
+		return $this->addresses;
 	}
 }
