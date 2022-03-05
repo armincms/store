@@ -14,6 +14,11 @@ class StoreAttributeGroup extends Model
      * @var bool
      */
     public $timestamps = false;
+    
+    /**
+     * Sign on model events.
+     */
+    public static function bootNodeTrait(){}
 
     /**
      * Get the targomaan driver.
