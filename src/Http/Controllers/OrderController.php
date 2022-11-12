@@ -83,8 +83,8 @@ class OrderController extends Controller
 
 						$order->products()->attach($product, [
 							'count' => $item->quantity,
-							'old_price'		=> $product->oldPrice(),
-							'sale_price'	=> $product->salePrice(),
+							'old_price'		=> ($combination ?? $product)->oldPrice(),
+							'sale_price'	=> ($combination ?? $product)->salePrice(),
 							'product_id' 	=> $product->getKey(),
 							'description' 	=> $product->summary,
 							'name' 	=> optional($combination)->fullname() ?: $product->name,
