@@ -12,8 +12,24 @@ class OrderController extends Controller
 	public function store(Request $request)
 	{
 		$request->validate([
-			'carrier.*' => 'required|numeric',
-			'address' => 'required|numeric',
+			'carrier.*' => [
+				'required', 
+				'numeric', 
+				function($attribute, $value, $fail) {
+					if (is_null(StoreCarrier::find($value))) {
+						$fail(__('Courier not found'));
+					}
+				} 
+			],
+			'address' => [
+				'required',
+				'numeric',
+				function($attribute, $value, $fail) {
+					if (! $value || is_null(StoreAddress::find($value))) {
+						$fail(__('Invalid ddress'));
+					}
+				} 
+			]
 		]);
 
 		$order = \DB::transaction(function() use ($request) {
@@ -23,7 +39,7 @@ class OrderController extends Controller
 				);
 
 				$order->forceFill([
-					'address' => $address->address,
+					'address' => $address->fullAddress(),
 					'currency_code' => config('nova.currency'),
 				]);
 
@@ -39,7 +55,7 @@ class OrderController extends Controller
 				$order->products()->sync([]);
 				$carriers = StoreCarrier::with([
 						'countries', 'states', 'cities', 'zones'
-					])->find(request('carrier'))
+					])->find((array) request('carrier'))
 					->keyBy->getKey()
 					->map(function($carrier) use ($address) {
 						$city = data_get($address, 'city.id');
@@ -90,7 +106,7 @@ class OrderController extends Controller
 							'name' 	=> optional($combination)->fullname() ?: $product->name,
 							'details' => [
 								'image' => $product->featuredImage(),
-								'carrier' => $carriers->get(request("carrier.{$group}")),
+								'carrier' => $carriers->get(request("carrier.{$group}")) ?? $carriers->first(),
 								'attributes' => $item->attributes->get('attributes'),
 							],
 						]);
