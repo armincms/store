@@ -116,9 +116,9 @@ class StoreCombination extends Model
 	public function name()
 	{
 		if ($attributes = $this->getRelationValue('attributes')) {
-			return $attributes->pluck('value', 'group.name')->map(function($value, $name) {
-				return "{$name}: {$value}";
-			})->implode(' - ');
+			return $attributes->loadMissing('translations', 'group.translations')->map(function($attribute) {
+				return $attribute->group->getTranslation('name') . ':' . $attribute->getTranslation('value');
+			})->implode(' - '); 
 		} 
 	}
 

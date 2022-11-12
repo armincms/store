@@ -61,6 +61,12 @@ class OrderItem extends Resource
                 return $this->total();
             }), 
 
+            Text::make(__('Carrier'), function() {
+                $names = (array) data_get($this->details, 'carrier.name');
+
+                return $names[app()->getLocale()] ?? array_shift($names);
+            }),
+
             BelongsTo::make(__('Related Product'), 'product', Product::class),
         ];
     } 

@@ -24,6 +24,15 @@ class StoreOrder extends Model implements Billable, Trackable
     	'total' => 'float',
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+    	'total'
+    ];
+
     public static function boot()
     {
     	parent::boot();
@@ -35,6 +44,16 @@ class StoreOrder extends Model implements Billable, Trackable
     			]);
     		}
     	});
+    }
+
+    /**
+     * Get name of the tree.
+     * 
+     * @return [type] [description]
+     */
+    public function getTotalAttribute()
+    {
+        return $this->totalPrice();
     }
 
     /**

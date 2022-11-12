@@ -2,9 +2,11 @@
 
 namespace Armincms\Store\Nova;
 
+use Armincms\Nova\User;
 use Illuminate\Http\Request;  
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Fields\Badge; 
+use Laravel\Nova\Fields\BelongsTo; 
 use Laravel\Nova\Fields\DateTime; 
 use Laravel\Nova\Fields\HasMany; 
 use Laravel\Nova\Fields\ID; 
@@ -63,6 +65,11 @@ class Order extends Resource
             DateTime::make(__('Created At'), 'created_at'),
 
             Textarea::make(__('Shipping Address'), 'address')
+                ->hideFromIndex(),
+            
+            BelongsTo::make(__('Order Customer'), 'user', User::class)
+                ->required()
+                ->rules('required')
                 ->hideFromIndex(),
 
             HasMany::make(__('Order Items'), 'saleables', OrderItem::class),

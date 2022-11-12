@@ -31,7 +31,7 @@ class OrderItem extends Pivot
 	public function product()
 	{
 		return $this->belongsTo(StoreProduct::class);
-	}  
+	} 
 
 	/**
 	 * Query the realted StoreOrder.
