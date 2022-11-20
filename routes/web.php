@@ -1,17 +1,17 @@
-<?php 
+<?php
 
 
 Route::post('store/login', [
-    'uses'  => Auth\LoginController::class.'@login',
+    'uses'  => Auth\LoginController::class . '@login',
     'as'    => 'store.attempt',
 ]);
 
 Route::post('store/register', [
-    'uses'  => Auth\RegisterController::class.'@register', 
+    'uses'  => Auth\RegisterController::class . '@register',
 ]);
 
 Route::post('store/logout', [
-    'uses'  => Auth\LoginController::class.'@logout',
+    'uses'  => Auth\LoginController::class . '@logout',
     'as'    => 'store.logout',
 ]);
 
@@ -27,4 +27,6 @@ Route::delete('adress/{id}', 'AddressController@delete')->name('store.address.de
 Route::resource('store/cart-item', 'StoreCartItemController', [
     'only' => ['store', 'destroy', 'update'],
     'names' => 'cart.item',
-]); 
+]);
+
+Route::get('store-search', 'SearchController@handle')->name('store.search');
