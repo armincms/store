@@ -1,9 +1,9 @@
-<?php 
+<?php
 
 namespace Armincms\Store\Http\Requests;
 
-trait InteractsWithProduct 
-{ 
+trait InteractsWithProduct
+{
     /**
      * Find the product for the incoming request.
      * 
@@ -11,10 +11,10 @@ trait InteractsWithProduct
      */
     public function findProductOrFail($productId = null)
     {
-        return once(function() use ($productId) {
-            return $this->newModel()->findOrFail($productId ?? $this->route('product')); 
+        return once(function () use ($productId) {
+            return $this->newModel()->findOrFail($productId ?? $this->route('product'));
         });
-    }  
+    }
 
     /**
      * Instanciate new query.
@@ -23,7 +23,7 @@ trait InteractsWithProduct
      */
     public function newProduct()
     {
-        return $this->newModel()->published();
+        return $this->newModel()->active();
     }
 
     /**
