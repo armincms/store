@@ -12,7 +12,7 @@ use Armincms\Concerns\Authorization;
 class StoreOrder extends Model implements Billable, Trackable 
 { 	  
 	use InteractsWithTransactions, HasTrackingCode, Authorization, SoftDeletes;
-    use Carryable, HasDelivery, HasCancelation, HasDraft, HasPending, HasCompletion, HasPayment, HasOnHold, Markable;
+    use Carryable, HasDelivery, HasCancelation, HasDraft, HasPending, HasCompletion, HasPayment, HasOnHold, HasOnSpot, Markable;
 
     /**
      * The attributes that should be cast to native types.

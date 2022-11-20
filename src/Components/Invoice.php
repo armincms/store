@@ -20,7 +20,9 @@ class Invoice extends Cart
 
 	public function toHtml(Request $request, Document $docuemnt) : string
 	{        
-		$order = StoreOrder::viaToken($request->token)->onHold()->firstOrFail()->asPaid();   
+		$order = StoreOrder::viaToken($request->token)->onHold()->orWhere->onSpot()->firstOrFail(); 
+		 
+		if (! $order->isOnSpot()) $order->asPaid();
 		
 		return strval(
 			$this->firstLayout($docuemnt, $this->config('layout', 'clean-invoice'))->display()

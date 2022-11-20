@@ -13,10 +13,13 @@ class PaymentController extends Controller
 	{
 		$request->validate([ 
 			'gateway' => 'required|numeric', 
-		]); 
+		]);  
 
 		$order = StoreOrder::viaCode($request->route('order'))->firstOrFail()->asOnHold();
+		$gateway = ArminpayGateway::findOrFail($request->gateway);
 
-		return ArminpayGateway::findOrFail($request->gateway)->checkout($request, $order);  
+		if ($gateway->driver === 'sandbox') $order->asOnSpot();
+
+		return $gateway->checkout($request, $order);  
 	} 
 }

@@ -55,6 +55,7 @@ class Order extends Resource
                 'draft' => 'danger',
                 'delivered' => 'success',
                 'paid' => 'success',
+                'onspot' => 'warning',
                 'pending' => 'warning',
                 'onhold' => 'warning',
                 'shipped' => 'info',
@@ -71,6 +72,14 @@ class Order extends Resource
                 ->required()
                 ->rules('required')
                 ->hideFromIndex(),
+            
+            Text::make(__('Carriers'), function() {
+                return $this->saleables->map(function($saleable) {
+                    $names = (array) data_get($saleable->details, 'carrier.name');
+    
+                    return $names[app()->getLocale()] ?? array_shift($names);
+                })->unique()->implode(' - ');
+            })->onlyOnDetail(),
 
             HasMany::make(__('Order Items'), 'saleables', OrderItem::class),
         ];
@@ -88,6 +97,8 @@ class Order extends Resource
             new Actions\Shipped,
 
             new Actions\Delivered,
+
+            new Actions\Paid,
         ];
     }
 
